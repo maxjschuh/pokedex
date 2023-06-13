@@ -1,28 +1,55 @@
-async function fetchData() {
+let pokedex = [];
 
-    const url = 'https://pokeapi.co/api/v2/pokemon/chimchar';
-    let response = await fetch(url);
+async function init() {
 
-    let responseJson = await response.json();
-
-    renderName(responseJson);
-    renderImage(responseJson);
+    await fetchData(1, 21);
+    render();
 }
 
-function renderName(responseJson) {
+async function loadMore() {
 
-    let content = document.getElementById('name');
-
-    let name = responseJson['forms']['0']['name'];
-
-    content.innerHTML = `${name}`;
+    await fetchData(21, 41);
+    render();
 }
 
-function renderImage(responseJson) {
+async function fetchData(start, end) {
 
-    let image = document.getElementById('image');
+    for (let i = start; i < end; i++) {
 
-    let image_url = responseJson['sprites']['front_default'];
+        const url = `https://pokeapi.co/api/v2/pokemon/${i}`;
 
-    image.src = image_url;
+        let response = await fetch(url);
+        let responseJson = await response.json();
+
+        pokedex.push(responseJson);
+    }
+}
+
+function render() {
+
+    let container = document.getElementById('main');
+    container.innerHTML = '';
+
+    for (let i = 0; i < pokedex.length; i++) {
+
+        container.innerHTML += templatePokedexCard(i);
+    }
+}
+
+function templatePokedexCard(i) {
+
+    const pokemon = pokedex[i];
+
+    const name = pokemon['forms'][0]['name'];
+    const imgUrl = pokemon['sprites']['other']['home']['front_default'];
+
+
+    let html = /*html*/ `
+    <div>
+        <h2>${name}</h2>
+        <img src="${imgUrl}" alt="${name}">
+    </div>
+    `;
+
+    return html;
 }
