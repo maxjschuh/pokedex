@@ -86,4 +86,9 @@ detail view
     font-weight: bold;
 }
 
+#detail-view-genders img {
+    width: 24px;
+    height: 24px;
+}
+
 

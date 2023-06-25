@@ -29,9 +29,11 @@ async function loadMore() {
 
 async function init2() {
 
-    await fetchData(1, 21);
-    await fetchDataPokemonSpecies(1, 21);
-    renderDetailView(1);
+    await fetchData(1, 41);
+    await fetchDataPokemonSpecies(1, 41);
+    renderDetailView(0);
+    renderGenders(0);
+    renderHeldItem(0);
 }
 
 function renderDetailView(i) {
@@ -125,7 +127,7 @@ function templatepokedexBaseCard(i) {
 
     const name = pokemon['forms'][0]['name'];
     const imgUrl = pokemon['sprites']['other']['home']['front_default'];
-    const pokedexBaseId = '#' + convertToTripleDigits(i);
+    const pokedexBaseId = '#' + convertToTripleDigits(i + 1);
 
     let html = /*html*/ `
     <div onclick="renderDetailView(${i})">
@@ -133,6 +135,8 @@ function templatepokedexBaseCard(i) {
         ${name} <br>
         ${pokedexBaseId}</h2>
         <img src="${imgUrl}" alt="${name}">
+
+        
     </div>
     `;
 
@@ -149,3 +153,108 @@ function convertToTripleDigits(i) {
 }
 
 
+//---------------------------------------
+// detail view - about - genders
+//---------------------------------------
+
+function renderGenders(i) {
+
+    let container = document.getElementById('detail-view-genders');
+    container.innerHTML = returnGendersTemplate(i);
+}
+
+
+function returnGendersTemplate(i) {
+
+    const genders = pokedexSpecies[i]['gender_rate'];
+    let html = '';
+
+    if (genders > 0 && genders < 8) {
+
+        html = templateBothGenders();
+
+    } else if (genders == 8) {
+
+        html = templateFemaleGender();
+
+    } else if (genders == 0) {
+        
+        html = templateMaleGender();
+
+    } else {
+
+        html = templateGenderless();
+    }
+
+    return html;
+}
+
+function templateBothGenders() {
+
+    return /*html*/ `
+        <p>Genders&nbsp;</p>
+        <img src="./img/male.svg" alt="icon male">
+        <img src="./img/female.svg" alt="icon female">
+    `;
+}
+
+function templateFemaleGender() {
+
+    return /*html*/ `
+        <p>Genders&nbsp;</p>
+        <img src="./img/female.svg" alt="icon female">
+    `;
+}
+
+function templateMaleGender() {
+
+    return /*html*/ `
+        <p>Genders&nbsp;</p>
+        <img src="./img/male.svg" alt="icon male">
+    `;
+}
+
+function templateGenderless() {
+
+    return /*html*/ `
+        <p>Genders&nbsp;</p>
+        <img src="./img/genderless.svg" alt="icon male">
+    `;
+}
+
+
+//---------------------------------------
+// detail view - about - type
+//---------------------------------------
+
+function renderHeldItem(i) {
+
+    let container = document.getElementById('detail-view-held-item');
+
+    let item = '';
+
+    try {
+        item = pokedexBase[i].held_items[0].item.name; 
+    } 
+    
+    catch (error) {
+        item = 'none'; 
+    }
+
+    container.innerHTML = /*html*/ `
+    <p>Held item&nbsp;</p>
+    ${item} `;
+}
+
+//---------------------------------------
+// detail view - about - type
+//---------------------------------------
+
+function renderTypes() {
+
+    let container = document.getElementById('detail-view-types');
+    let html = '';
+
+    itempokedexBase[i].held_items[0].item.name; 
+
+}
