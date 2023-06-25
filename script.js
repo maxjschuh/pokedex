@@ -34,6 +34,7 @@ async function init2() {
     renderDetailView(0);
     renderGenders(0);
     renderHeldItem(0);
+    renderTypes(0);
 }
 
 function renderDetailView(i) {
@@ -250,11 +251,29 @@ function renderHeldItem(i) {
 // detail view - about - type
 //---------------------------------------
 
-function renderTypes() {
+function renderTypes(i) {
 
     let container = document.getElementById('detail-view-types');
-    let html = '';
+    container.innerHTML = '';
 
-    itempokedexBase[i].held_items[0].item.name; 
+    const types = pokedexBase[i].types;
 
+    for (let j = 0; j < types.length; j++) {
+
+        const type = types[j].type.name;
+
+        container.innerHTML += templateType(type);        
+    }
+
+}
+
+function templateType(type) {
+
+    let html = /*html*/ `
+    <div class="background-type-${type}">
+        <img src="./img/types/type_${type}.svg" alt="icon type ${type}">
+        ${type}
+    </div> `;
+
+    return html;
 }

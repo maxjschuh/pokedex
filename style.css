@@ -3,6 +3,11 @@
     src: url('./fonts/Exo2-VariableFont_wght.ttf');
 }
 
+@font-face {
+    font-family: 'Exo2 italic';
+    src: url('./fonts/Exo2-Italic-VariableFont_wght.ttf');
+}
+
 body {
     margin: 0;
     font-family: 'Exo2';
@@ -90,5 +95,118 @@ detail view
     width: 24px;
     height: 24px;
 }
+
+#detail-view-about-separator {
+    height: 2px;
+    background-color: #CACACA;
+}
+
+#detail-view-types {
+    display: flex;
+    gap: 16px;
+}
+
+#detail-view-types div {
+    display: flex;
+    gap: 8px;
+    border-radius: 16px;
+    padding: 2px 8px 2px 2px;
+}
+
+#detail-view-types img {
+    width: 24px;
+}
+
+
+/*----------------------------------
+type colors
+----------------------------------*/
+
+.background-type-bug {
+    background-color: #90C12C;
+}
+
+.background-type-dark {
+    background-color: #5A5366;
+}
+
+.background-type-dragon {
+    background-color: #096DC4;
+}
+
+.background-type-electric {
+    background-color: #F3D23B;
+}
+
+.background-type-electric {
+    background-color: #EC8FE6;
+}
+
+.background-type-fighting {
+    background-color: #ce4069;
+}
+
+.background-type-fire {
+    background-color: #ff9c54;
+}
+
+.background-type-flying {
+    background-color: #92aade;
+}
+
+.background-type-ghost {
+    background-color: #5269ac;
+}
+
+.background-type-grass {
+    background-color: #63BB5B;
+}
+
+.background-type-ground {
+    background-color: #d97746;
+}
+
+.background-type-ice {
+    background-color: #74cec0;
+}
+
+.background-type-normal {
+    background-color: #9099A1;
+}
+
+.background-type-poison {
+    background-color: #ab6ac8;
+}
+
+.background-type-psychic {
+    background-color: #f97176;
+}
+
+.background-type-rock {
+    background-color: #c7b78b;
+}
+
+.background-type-steel {
+    background-color: #5a8ea1;
+}
+
+.background-type-water {
+    background-color: #4d90d5;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
