@@ -73,7 +73,7 @@ detail view
     width: 100%;
 }
 
-#detail-view div {
+.detail-view-section {
     background-color: #1F1F1F;
 }
 
@@ -117,6 +117,47 @@ detail view
     width: 24px;
 }
 
+
+
+
+
+
+
+
+
+
+/*----------------------------------
+detail view - stats section
+----------------------------------*/
+
+
+.detail-view-stats-row {
+    position: relative;
+    font-weight: bold;
+}
+
+.stats-bar {
+    position: absolute;
+    top: 0;
+    left: 56px;
+
+    height: 100%;
+    width: calc(100% - 56px);
+
+    background-color: #535353;
+    border-radius: 16px;
+}
+
+/* .stats-bar-colored {
+    position: absolute;
+    top: 0;
+    left: 40px;
+
+    height: 100%;
+    width: calc(50% - 40px);
+
+    border-radius: 16px;
+} */
 
 /*----------------------------------
 type colors
@@ -193,20 +234,3 @@ type colors
 .background-type-water {
     background-color: #4d90d5;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

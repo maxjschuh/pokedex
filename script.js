@@ -24,9 +24,6 @@ async function loadMore() {
 //test area
 //---------------------------------------
 
-// str = str.replace(/[\u00A0\u1680​\u180e\u2000-\u2009\u200a​\u200b​\u202f\u205f​\u3000]/g,'');
-
-
 async function init2() {
 
     await fetchData(1, 41);
@@ -43,6 +40,20 @@ function renderDetailView(i) {
     container.innerHTML = templateDetailView(i);
 }
 
+function getEnglishFlavorText(i) {
+
+    const pokemon = pokedexSpecies[i];
+
+    for (let i = 0; i < pokemon.flavor_text_entries.length; i++) {
+        const entry = pokemon.flavor_text_entries[i];
+
+        if (entry.language.name == 'en') {
+
+            return entry.flavor_text;
+        }
+    }
+}
+
 function templateDetailView(i) {
 
     const pokemon = pokedexBase[i];
@@ -50,32 +61,81 @@ function templateDetailView(i) {
     const name = pokemon['forms'][0]['name'];
     const imgUrl = pokemon['sprites']['other']['home']['front_default'];
     const pokedexBaseId = '#' + convertToTripleDigits(i);
-    const flavorText = pokedexSpecies[i]['flavor_text_entries'][0]['flavor_text'];
+    const flavorText = getEnglishFlavorText(i);
 
     let html = /*html*/ `
 
         <h2>${name} ${pokedexBaseId}</h2>
         <img src="${imgUrl}" alt="${name}">
 
-        <div>
+        <div class="detail-view-section">
         <h3>About</h3>
         <p>${flavorText}</p>
         </div>
 
-        <div>
-            <h3>Status</h3>
+        <div class="detail-view-section">
+            <h3>Stats</h3>
+            ${templateStats(i)}
         </div>
 
-        <div>
+        <div class="detail-view-section">
             <h3>Moves</h3>
         </div>
 
-        <div>
+        <div class="detail-view-section">
             <h3>Evolutions</h3>
         </div>
     `;
 
     return html;
+}
+
+function templateStats(i) {
+
+    let html = /*html*/ `
+    
+        <div class="detail-view-stats-row">
+            <p>HP</p>
+            <div class="stats-bar"></div>
+            <div class="stats-bar background-type-grass" style="width:calc(${calculateStatsBarWidth(i, 0, 255)}% - 56px)"></div>        
+        </div>
+
+        <div class="detail-view-stats-row">
+            <p>ATK</p>
+            <div class="stats-bar"></div>
+            <div class="stats-bar background-type-grass" style="width:calc(${calculateStatsBarWidth(i, 1, 181)}% - 56px)"></div>        
+        </div>
+
+        <div class="detail-view-stats-row">
+            <p>DEF</p>
+            <div class="stats-bar"></div>
+            <div class="stats-bar background-type-grass" style="width:calc(${calculateStatsBarWidth(i, 2, 230)}% - 56px)"></div>        
+        </div>
+
+        <div class="detail-view-stats-row">
+            <p>SATK</p>
+            <div class="stats-bar"></div>
+            <div class="stats-bar background-type-grass" style="width:calc(${calculateStatsBarWidth(i, 3, 180)}% - 56px)"></div>        
+        </div>
+
+        <div class="detail-view-stats-row">
+            <p>SDEF</p>
+            <div class="stats-bar"></div>
+            <div class="stats-bar background-type-grass" style="width:calc(${calculateStatsBarWidth(i, 4, 230)}% - 56px)"></div>        
+        </div>
+
+        <div class="detail-view-stats-row">
+            <p>SPD</p>
+            <div class="stats-bar"></div>
+            <div class="stats-bar background-type-grass" style="width:calc(${calculateStatsBarWidth(i, 5, 200)}% - 56px)"></div>
+        </div>`;
+
+    return html;
+}
+
+function calculateStatsBarWidth(i, statType, maxStat) {
+
+    return pokedexBase[i].stats[statType].base_stat / maxStat * 100;
 }
 
 
@@ -179,7 +239,7 @@ function returnGendersTemplate(i) {
         html = templateFemaleGender();
 
     } else if (genders == 0) {
-        
+
         html = templateMaleGender();
 
     } else {
@@ -235,11 +295,11 @@ function renderHeldItem(i) {
     let item = '';
 
     try {
-        item = pokedexBase[i].held_items[0].item.name; 
-    } 
-    
+        item = pokedexBase[i].held_items[0].item.name;
+    }
+
     catch (error) {
-        item = 'none'; 
+        item = 'none';
     }
 
     container.innerHTML = /*html*/ `
@@ -262,7 +322,7 @@ function renderTypes(i) {
 
         const type = types[j].type.name;
 
-        container.innerHTML += templateType(type);        
+        container.innerHTML += templateType(type);
     }
 
 }
