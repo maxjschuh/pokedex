@@ -21,6 +21,69 @@ async function loadMore() {
 }
 
 //---------------------------------------
+//render moves
+//---------------------------------------
+let moveNames = [];
+let moveTypes = [];
+
+async function createMovesArrays() {
+
+    let response = await fetch('https://pokeapi.co/api/v2/move?limit=10000');
+    response = await response.json();
+
+    for (let i = 0; i < response.results.length; i++) {
+        const moveName = response.results[i].name;
+
+        moveNames.push(moveName);  
+        console.log('push');      
+    }
+
+    moveTypes = Array(moveNames.length).fill(null);
+}
+
+async function renderFirst4Moves(i) {
+    const pokemon = pokedexBase[i];
+
+    for (let j = 0; j < 4; j++) {
+        const move = pokemon.moves[j].move;
+
+        const id = `detail-view-move-${j}`;
+        let container = document.getElementById(id);
+
+        container.innerHTML = await templateMove(move.name, move.url);
+        console.log('hier');
+    }
+}
+
+async function templateMove(moveName, moveUrl) {
+
+    console.log(moveName, moveUrl);
+    let index = moveNames.indexOf(moveName);
+    console.log(index);
+
+    if (moveTypes[index] == null) {
+        
+        await fetchMoveType(index, moveUrl);
+    }
+    const moveType = moveTypes[index];
+
+    let html = /*html*/ `
+    ${moveName}
+    ${templateType(moveType)}
+    `;
+    return html;
+}
+
+async function fetchMoveType(index, url) {
+
+    let moveData = await fetch(url);
+    moveData = await moveData.json();
+
+    moveTypes.splice(index, 1, moveData.type.name);
+}
+
+
+//---------------------------------------
 //test area
 //---------------------------------------
 
@@ -32,6 +95,8 @@ async function init2() {
     renderGenders(0);
     renderHeldItem(0);
     renderTypes(0);
+    await createMovesArrays();
+    await renderFirst4Moves(13);
 }
 
 function renderDetailView(i) {
@@ -330,7 +395,7 @@ function renderTypes(i) {
 function templateType(type) {
 
     let html = /*html*/ `
-    <div class="background-type-${type}">
+    <div class="detail-view-type-icon background-type-${type}">
         <img src="./img/types/type_${type}.svg" alt="icon type ${type}">
         ${type}
     </div> `;

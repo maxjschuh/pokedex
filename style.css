@@ -96,7 +96,7 @@ detail view
     height: 24px;
 }
 
-#detail-view-about-separator {
+.detail-view-separator {
     height: 2px;
     background-color: #CACACA;
 }
@@ -106,14 +106,16 @@ detail view
     gap: 16px;
 }
 
-#detail-view-types div {
+.detail-view-type-icon {
     display: flex;
     gap: 8px;
     border-radius: 16px;
     padding: 2px 8px 2px 2px;
+    width: fit-content;
+    height: 24px;
 }
 
-#detail-view-types img {
+.detail-view-type-icon img {
     width: 24px;
 }
 
@@ -179,7 +181,7 @@ type colors
     background-color: #F3D23B;
 }
 
-.background-type-electric {
+.background-type-fairy {
     background-color: #EC8FE6;
 }
 
