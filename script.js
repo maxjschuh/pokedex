@@ -1,5 +1,8 @@
-let pokedexBase = [];
-let pokedexSpecies = [];
+let basePokedex = Array(1281).fill(null);
+let speciesPokedex = Array(1281).fill(null);
+let namesPokedex = Array(1281).fill(null);
+let evolutionChains = Array(530).fill(null);
+
 
 //---------------------------------------
 // init
@@ -34,15 +37,14 @@ async function createMovesArrays() {
     for (let i = 0; i < response.results.length; i++) {
         const moveName = response.results[i].name;
 
-        moveNames.push(moveName);  
-        console.log('push');      
+        moveNames.push(moveName);
     }
 
     moveTypes = Array(moveNames.length).fill(null);
 }
 
 async function renderFirst4Moves(i) {
-    const pokemon = pokedexBase[i];
+    const pokemon = basePokedex[i];
 
     for (let j = 0; j < 4; j++) {
         const move = pokemon.moves[j].move;
@@ -51,24 +53,21 @@ async function renderFirst4Moves(i) {
         let container = document.getElementById(id);
 
         container.innerHTML = await templateMove(move.name, move.url);
-        console.log('hier');
     }
 }
 
 async function templateMove(moveName, moveUrl) {
 
-    console.log(moveName, moveUrl);
     let index = moveNames.indexOf(moveName);
-    console.log(index);
 
     if (moveTypes[index] == null) {
-        
+
         await fetchMoveType(index, moveUrl);
     }
     const moveType = moveTypes[index];
 
     let html = /*html*/ `
-    ${moveName}
+    ${capitalizeFirstCharacter(moveName)}
     ${templateType(moveType)}
     `;
     return html;
@@ -99,15 +98,43 @@ async function init2() {
     await renderFirst4Moves(13);
 }
 
-function renderDetailView(i) {
+async function init4() {
+    await loadAndRenderPokemon(0, 20);
+}
+
+async function initDetailView() {
+    const first = 0;
+    const last = 25;
+
+    for (let i = first; i < last; i++) {
+
+        await fetchData(i, `https://pokeapi.co/api/v2/pokemon/${i + 1}`, basePokedex);
+        await fetchData(i, `https://pokeapi.co/api/v2/pokemon-species/${i + 1}`, speciesPokedex);
+    }
+
+    renderDetailView(24);
+
+       
+}
+
+async function renderDetailView(i) {
     let container = document.getElementById('detail-view');
 
     container.innerHTML = templateDetailView(i);
+
+    renderGenders(i);
+    renderHeldItem(i);
+    renderTypes(i);
+    await createMovesArrays();
+    await renderFirst4Moves(i);
+
+    await evolutionTree(i);
+    setBorderOfActiveTreeCard(i); 
 }
 
 function getEnglishFlavorText(i) {
 
-    const pokemon = pokedexSpecies[i];
+    const pokemon = speciesPokedex[i];
 
     for (let i = 0; i < pokemon.flavor_text_entries.length; i++) {
         const entry = pokemon.flavor_text_entries[i];
@@ -121,21 +148,23 @@ function getEnglishFlavorText(i) {
 
 function templateDetailView(i) {
 
-    const pokemon = pokedexBase[i];
+    const pokemon = basePokedex[i];
 
     const name = pokemon['forms'][0]['name'];
     const imgUrl = pokemon['sprites']['other']['home']['front_default'];
-    const pokedexBaseId = '#' + convertToTripleDigits(i);
+    const basePokedexId = '#' + convertToTripleDigits(i + 1);
     const flavorText = getEnglishFlavorText(i);
 
     let html = /*html*/ `
 
-        <h2>${name} ${pokedexBaseId}</h2>
+        <h2>${capitalizeFirstCharacter(name)} ${basePokedexId}</h2>
         <img src="${imgUrl}" alt="${name}">
 
         <div class="detail-view-section">
         <h3>About</h3>
         <p>${flavorText}</p>
+
+        ${renderTypes(i)}
         </div>
 
         <div class="detail-view-section">
@@ -147,8 +176,12 @@ function templateDetailView(i) {
             <h3>Moves</h3>
         </div>
 
-        <div class="detail-view-section">
+        <div id="evolutions" class="detail-view-section">
             <h3>Evolutions</h3>
+            <div id="evolution-tree-root"></div>
+            <div id="evolution-tree-first-branch"></div>
+            <div id="evolution-tree-second-branch"></div>
+
         </div>
     `;
 
@@ -200,25 +233,14 @@ function templateStats(i) {
 
 function calculateStatsBarWidth(i, statType, maxStat) {
 
-    return pokedexBase[i].stats[statType].base_stat / maxStat * 100;
+    return basePokedex[i].stats[statType].base_stat / maxStat * 100;
 }
 
 
 //---------------------------------------
 // fetch data
 //---------------------------------------
-async function fetchData(start, end) {
 
-    for (let i = start; i < end; i++) {
-
-        const url = `https://pokeapi.co/api/v2/pokemon/${i}`;
-
-        let response = await fetch(url);
-        let responseJson = await response.json();
-
-        pokedexBase.push(responseJson);
-    }
-}
 
 async function fetchDataPokemonSpecies(start, end) {
 
@@ -229,37 +251,190 @@ async function fetchDataPokemonSpecies(start, end) {
         let response = await fetch(url);
         let responseJson = await response.json();
 
-        pokedexSpecies.push(responseJson);
+        speciesPokedex.push(responseJson);
     }
 }
 
 //---------------------------------------
 //render cards
 //---------------------------------------
-function render() {
+
+async function loadAndRenderPokemon(first, last) {
 
     let container = document.getElementById('main');
     container.innerHTML = '';
 
-    for (let i = 0; i < pokedexBase.length; i++) {
+    for (let i = first; i < last; i++) {
 
-        container.innerHTML += templatepokedexBaseCard(i);
+        let url = `https://pokeapi.co/api/v2/pokemon/${i + 1}`;
+        await fetchData(i, url, basePokedex);
+
+        container.innerHTML += templatebasePokedexCard(i);
+
+        url = basePokedex[i].species.url;
+        await fetchData(i, url, speciesPokedex);
+        namesPokedex.splice(i, 1, basePokedex[i].name);
     }
 }
 
-function templatepokedexBaseCard(i) {
+async function fetchData(i, url, localJsonToPushTo) {
 
-    const pokemon = pokedexBase[i];
+    let response = await fetch(url);
+    let responseJson = await response.json();
 
-    const name = pokemon['forms'][0]['name'];
-    const imgUrl = pokemon['sprites']['other']['home']['front_default'];
-    const pokedexBaseId = '#' + convertToTripleDigits(i + 1);
+    localJsonToPushTo.splice(i, 1, responseJson);
+}
+
+
+// ---------------------------------------
+// evolutions
+// ---------------------------------------
+
+
+async function evolutionTree(i) {
+
+    if (speciesPokedex[i].evolves_from_species) {
+
+        const j = await fetchSinglePokemonReturnIndex(speciesPokedex[i].evolves_from_species.name);
+        await evolutionTree(j);
+
+        
+    } else {
+
+        let container = document.getElementById('evolution-tree-root');
+        container.innerHTML = templateEvolutionTreeCard(i);
+
+        await getEvolutionChainData(i);
+        await generateEvolutionTree(i);
+    }
+}
+
+function setBorderOfActiveTreeCard(i) {
+
+    const id = `tree-card-${i}`;
+    const borderClass = `border-type-${basePokedex[i].types[0].type.name}`;
+    document.getElementById(id).classList.add(borderClass);
+}
+
+function getLocalData() {
+
+    const evolutionChainsAsText = localStorage.getItem('evolutionChains');
+
+    if (evolutionChainsAsText) {
+
+        evolutionChains = JSON.parse(evolutionChainsAsText);
+    }
+}
+
+function setLocalData() {
+
+    const evolutionChainsAsText = JSON.stringify(evolutionChains);
+    localStorage.setItem('evolutionChains', evolutionChainsAsText);
+}
+
+async function getEvolutionChainData(i) {
+
+    if (!evolutionChains[i]) {
+
+        let url = speciesPokedex[i].evolution_chain.url;
+
+        let response = await fetch(url);
+        response = await response.json();
+
+        evolutionChains.splice(i, 1, response);
+    }
+}
+
+async function generateEvolutionTree(basePokemonIndex) {
+
+    let firstStageEvolutions = evolutionChains[basePokemonIndex].chain.evolves_to;
+
+    let treeFirstBranch = document.getElementById('evolution-tree-first-branch');
+    let treeSecondBranch = document.getElementById('evolution-tree-second-branch');
+    treeFirstBranch.innerHTML = '';
+    treeSecondBranch.innerHTML = '';
+
+
+    for (let i = 0; i < firstStageEvolutions.length; i++) {
+
+        const firstStageEvolution = firstStageEvolutions[i];
+        const secondStageEvolutions = firstStageEvolution.evolves_to;
+
+        const firstStageEvolutionIndex = await fetchSinglePokemonReturnIndex(firstStageEvolution.species.name);
+
+        treeFirstBranch.innerHTML += templateEvolutionTreeCard(firstStageEvolutionIndex);
+
+        for (let j = 0; j < secondStageEvolutions.length; j++) {
+
+            console.log('second stage');
+
+
+            const secondStageEvolution = secondStageEvolutions[j];
+
+            const index = await fetchSinglePokemonReturnIndex(secondStageEvolution.species.name);
+
+            treeSecondBranch.innerHTML += templateEvolutionTreeCard(index);
+        }
+    }
+}
+
+
+async function fetchSinglePokemonReturnIndex(name) {
+
+    let index = namesPokedex.indexOf(name);
+
+    if (index == -1) {
+
+        let url = `https://pokeapi.co/api/v2/pokemon/${name}`;
+        let response = await fetch(url);
+        response = await response.json();
+
+        index = response.id - 1;
+
+        basePokedex.splice(index, 1, response);
+
+        url = basePokedex[index].species.url;
+
+        response = await fetch(url);
+        response = await response.json();
+        speciesPokedex.splice(index, 1, response);
+
+        namesPokedex.splice(index, 1, basePokedex[index].name);
+    }
+    return index;
+}
+
+function templateEvolutionTreeCard(i) {
+
+    const name = basePokedex[i].name;
+
+    const imgUrl = basePokedex[i].sprites.other.home.front_default;
+
+    let html = /*html*/ `
+    <div id="tree-card-${i}" class="evolution-tree-card" onclick="renderDetailView(${i})">
+    <img src="${imgUrl}" alt="${name}">
+    ${name}
+    ${renderTypes(i)}
+
+    </div> `;
+
+    return html;
+}
+
+function templatebasePokedexCard(i) {
+
+    const pokemon = basePokedex[i];
+
+    const name = pokemon.name;
+    const imgUrl = pokemon.sprites.other.home.front_default;
+
+    const basePokedexId = '#' + convertToTripleDigits(i + 1);
 
     let html = /*html*/ `
     <div onclick="renderDetailView(${i})">
         <h2>
-        ${name} <br>
-        ${pokedexBaseId}</h2>
+        ${capitalizeFirstCharacter(name)} <br>
+        ${basePokedexId}</h2>
         <img src="${imgUrl}" alt="${name}">
 
         
@@ -278,6 +453,13 @@ function convertToTripleDigits(i) {
     return zeros + idAsString;
 }
 
+function capitalizeFirstCharacter(inputString) {
+
+    let firstCharacter = inputString.charAt(0).toUpperCase();
+    let newString = firstCharacter + inputString.substring(1);
+    return newString;
+}
+
 
 //---------------------------------------
 // detail view - about - genders
@@ -292,7 +474,7 @@ function renderGenders(i) {
 
 function returnGendersTemplate(i) {
 
-    const genders = pokedexSpecies[i]['gender_rate'];
+    const genders = speciesPokedex[i]['gender_rate'];
     let html = '';
 
     if (genders > 0 && genders < 8) {
@@ -360,7 +542,7 @@ function renderHeldItem(i) {
     let item = '';
 
     try {
-        item = pokedexBase[i].held_items[0].item.name;
+        item = basePokedex[i].held_items[0].item.name;
     }
 
     catch (error) {
@@ -378,17 +560,17 @@ function renderHeldItem(i) {
 
 function renderTypes(i) {
 
-    let container = document.getElementById('detail-view-types');
-    container.innerHTML = '';
+    let html = '';
 
-    const types = pokedexBase[i].types;
+    const types = basePokedex[i].types;
 
     for (let j = 0; j < types.length; j++) {
 
         const type = types[j].type.name;
 
-        container.innerHTML += templateType(type);
+        html += templateType(type);
     }
+    return html;
 
 }
 
@@ -397,7 +579,7 @@ function templateType(type) {
     let html = /*html*/ `
     <div class="detail-view-type-icon background-type-${type}">
         <img src="./img/types/type_${type}.svg" alt="icon type ${type}">
-        ${type}
+        ${capitalizeFirstCharacter(type)}
     </div> `;
 
     return html;

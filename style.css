@@ -1,3 +1,7 @@
+/*----------------------------------
+type colors - backgrounds
+----------------------------------*/
+
 @font-face {
     font-family: 'Exo2';
     src: url('./fonts/Exo2-VariableFont_wght.ttf');
@@ -121,11 +125,19 @@ detail view
 
 
 
+#evolutions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
 
+.evolution-tree-card {
 
+    border: 2px solid grey;
+    border-radius: 24px;
 
-
+}
 
 
 /*----------------------------------
@@ -161,9 +173,7 @@ detail view - stats section
     border-radius: 16px;
 } */
 
-/*----------------------------------
-type colors
-----------------------------------*/
+
 
 .background-type-bug {
     background-color: #90C12C;
@@ -235,4 +245,80 @@ type colors
 
 .background-type-water {
     background-color: #4d90d5;
+}
+
+/*----------------------------------
+type colors - borders
+----------------------------------*/
+
+.border-type-bug {
+    border-color: #90C12C;
+}
+
+.border-type-dark {
+    border-color: #5A5366;
+}
+
+.border-type-dragon {
+    border-color: #096DC4;
+}
+
+.border-type-electric {
+    border-color: #F3D23B;
+}
+
+.border-type-fairy {
+    border-color: #EC8FE6;
+}
+
+.border-type-fighting {
+    border-color: #ce4069;
+}
+
+.border-type-fire {
+    border-color: #ff9c54;
+}
+
+.border-type-flying {
+    border-color: #92aade;
+}
+
+.border-type-ghost {
+    border-color: #5269ac;
+}
+
+.border-type-grass {
+    border-color: #63BB5B;
+}
+
+.border-type-ground {
+    border-color: #d97746;
+}
+
+.border-type-ice {
+    border-color: #74cec0;
+}
+
+.border-type-normal {
+    border-color: #9099A1;
+}
+
+.border-type-poison {
+    border-color: #ab6ac8;
+}
+
+.border-type-psychic {
+    border-color: #f97176;
+}
+
+.border-type-rock {
+    border-color: #c7b78b;
+}
+
+.border-type-steel {
+    border-color: #5a8ea1;
+}
+
+.border-type-water {
+    border-color: #4d90d5;
 }
