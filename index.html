@@ -9,7 +9,10 @@
 
     <link rel="stylesheet" href="./style.css">
 
-    <script src="./script.js"></script>
+
+    <script src="./pokedex.js"></script>
+    <script src="./detail_view.js"></script>
+
 </head>
 
 <body onload="init4()">
@@ -20,15 +23,27 @@
         </a>
     </header>
 
+    <main>
 
-    <div id="main"></div>
+        <div id="card-deck"></div>
 
-    <button onclick="loadMore()">Load more</button>
+        <div id="detail-view"></div>
+
+        <div id="loading-animation">
+
+            <svg viewBox="0 0 80 80" width="80" height="80">
+                <circle class="circle" cx="20" cy="40" r="6"></circle>
+                <circle class="circle" cx="40" cy="40" r="6"></circle>
+                <circle class="circle" cx="60" cy="40" r="6"></circle>
+            </svg>
+
+        </div>
 
 
-    <div id="detail-view">
+    </main>
 
-    </div>
+
+
 
 
 
