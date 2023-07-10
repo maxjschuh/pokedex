@@ -9,62 +9,46 @@ let evolutionChains = Array(530).fill(null);
 //---------------------------------------
 
 async function init() {
-
-    await fetchData(1, 21);
-    await fetchDataPokemonSpecies(1, 21);
-    render();
-    renderDetailView(1);
-}
-
-async function init2() {
-
-    await fetchData(1, 41);
-    await fetchDataPokemonSpecies(1, 41);
-    renderDetailView(0);
-    renderGenders(0);
-    renderHeldItem(0);
-    renderTypes(0);
-    await createMovesArrays();
-    await renderFirst4Moves(13);
-}
-
-async function init4() {
     await loadAndRenderPokemon(0, 20);
+
     document.getElementById('loading-animation').classList.add('display-none');
+
+    await includeHTML();
+
+    // await renderDetailView(1);
 }
 
-async function loadMore() {
+// async function loadMore() {
 
-    await fetchData(21, 41);
-    await fetchDataPokemonSpecies(21, 41);
-    render();
+//     await fetchData(21, 41);
+//     await fetchDataPokemonSpecies(21, 41);
+//     render();
+// }
+
+
+
+async function includeHTML() {
+    let includeElements = document.querySelectorAll('[w3-include-html]');
+
+    for (let i = 0; i < includeElements.length; i++) {
+
+        const element = includeElements[i];
+        file = element.getAttribute("w3-include-html");
+        let resp = await fetch(file);
+
+        if (resp.ok) {
+            element.innerHTML = await resp.text();
+        } else {
+            element.innerHTML = 'Page not found';
+        }
+    }
 }
+
+
 
 //---------------------------------------
 // fetch data
 //---------------------------------------
-
-async function fetchData(i, url, localJsonToPushTo) {
-
-    let response = await fetch(url);
-    let responseJson = await response.json();
-
-    localJsonToPushTo.splice(i, 1, responseJson);
-}
-
-
-async function fetchDataPokemonSpecies(start, end) {
-
-    for (let i = start; i < end; i++) {
-
-        const url = `https://pokeapi.co/api/v2/pokemon-species/${i}`;
-
-        let response = await fetch(url);
-        let responseJson = await response.json();
-
-        speciesPokedex.push(responseJson);
-    }
-}
 
 async function loadAndRenderPokemon(first, last) {
 
@@ -73,17 +57,31 @@ async function loadAndRenderPokemon(first, last) {
 
     for (let i = first; i < last; i++) {
 
-        let url = `https://pokeapi.co/api/v2/pokemon/${i + 1}`;
+        const url = `https://pokeapi.co/api/v2/pokemon/${i + 1}`;
         await fetchData(i, url, basePokedex);
 
         container.innerHTML += templatebasePokedexCard(i);
 
-        url = basePokedex[i].species.url;
-        await fetchData(i, url, speciesPokedex);
         namesPokedex.splice(i, 1, basePokedex[i].name);
     }
 }
 
+async function getPokemonSpeciesData(first, last) {
+
+    for (let i = first; i < last; i++) {
+
+        const url = basePokedex[i].species.url;
+        await fetchData(i, url, speciesPokedex);
+    }
+}
+
+async function fetchData(i, url, localJsonToPushTo) {
+
+    let response = await fetch(url);
+    let responseJson = await response.json();
+
+    localJsonToPushTo.splice(i, 1, responseJson);
+}
 
 //---------------------------------------
 // utilities for rendering
@@ -122,9 +120,7 @@ function templatebasePokedexCard(i) {
         <h2>
         ${capitalizeFirstCharacter(name)} <br>
         ${basePokedexId}</h2>
-        <img src="${imgUrl}" alt="${name}">
-
-        
+        <img src="${imgUrl}" alt="${name}">        
     </div>
     `;
 

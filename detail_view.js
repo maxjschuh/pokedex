@@ -2,85 +2,98 @@
 // init
 //---------------------------------------
 
-async function initDetailView() {
-    const first = 0;
-    const last = 25;
-
-    for (let i = first; i < last; i++) {
-
-        await fetchData(i, `https://pokeapi.co/api/v2/pokemon/${i + 1}`, basePokedex);
-        await fetchData(i, `https://pokeapi.co/api/v2/pokemon-species/${i + 1}`, speciesPokedex);
-    }
-
-    renderDetailView(24);       
-}
-
 async function renderDetailView(i) {
-    let container = document.getElementById('detail-view');
-
-    container.innerHTML = templateDetailView(i);
-
-    renderGenders(i);
-    renderHeldItem(i);
-    renderTypes(i);
-    await createMovesArrays();
-    await renderFirst4Moves(i);
-
-    await evolutionTree(i);
-    setBorderOfActiveTreeCard(i); 
-}
-
-
-//---------------------------------------
-// detail view
-//---------------------------------------
-
-function templateDetailView(i) {
 
     const pokemon = basePokedex[i];
 
-    const name = pokemon['forms'][0]['name'];
+    renderTopImage(pokemon);
+    renderPokemonName(i, pokemon);
+
+    await getPokemonSpeciesData(0, 20);
+
+    renderAboutSection(i, pokemon);
+    renderGenders(i);
+    renderHeldItem(i);
+    renderTypes(i);
+    unlockSection('section-about', 'loading-animation-1');
+
+    templateStats(i);
+
+    // await createMovesArrays();
+    // await renderFirst4Moves(i);
+    // unlockSection('section-moves', 'loading-animation-2');
+
+}
+
+function unlockSection(sectionToUnlock, loadingAnimationToHide) {
+
+    document.getElementById(sectionToUnlock).classList.remove('display-none');
+    document.getElementById(loadingAnimationToHide).classList.add('display-none');
+}
+
+
+function renderTopImage(pokemon) {
+
     const imgUrl = pokemon['sprites']['other']['home']['front_default'];
+    document.getElementById('detail-view-top-image').src = `${imgUrl}`;
+}
+
+function renderPokemonName(i, pokemon) {
+
+    const name = pokemon['forms'][0]['name'];
     const basePokedexId = '#' + convertToTripleDigits(i + 1);
-    const flavorText = getEnglishFlavorText(i);
 
-    let html = /*html*/ `
 
-        <h2>${capitalizeFirstCharacter(name)} ${basePokedexId}</h2>
-        <img src="${imgUrl}" alt="${name}">
+    let container = document.getElementById('detail-view-pokemon-name');
 
-        <div class="detail-view-section">
-        <h3>About</h3>
-        <p>${flavorText}</p>
-
-        ${renderTypes(i)}
-        </div>
-
-        <div class="detail-view-section">
-            <h3>Stats</h3>
-            ${templateStats(i)}
-        </div>
-
-        <div class="detail-view-section">
-            <h3>Moves</h3>
-        </div>
-
-        <div id="evolutions" class="detail-view-section">
-            <h3>Evolutions</h3>
-            <div id="evolution-tree-root"></div>
-            <div id="evolution-tree-first-branch"></div>
-            <div id="evolution-tree-second-branch"></div>
-
-        </div>
-    `;
-
-    return html;
+    container.innerHTML = `
+    ${capitalizeFirstCharacter(name)} ${basePokedexId}`;
 }
 
 
 //---------------------------------------
 // detail view - about
 //---------------------------------------
+
+function renderAboutSection(i, pokemon) {
+
+    const flavorText = getEnglishFlavorText(i);
+
+    let container = document.getElementById('section-about');
+
+    let html = /*html*/ `
+
+        <p>${flavorText}</p>
+
+        <div class="detail-view-table-row">
+
+            <div>
+                <p>Height&nbsp;</p>${pokemon.height}
+            </div>
+
+            <div id="detail-view-held-item">
+            </div>
+
+        </div>
+
+        <div class="detail-view-table-row">
+    
+            <div>
+                <p>Weight&nbsp;</p>${pokemon.weight}
+            </div>
+
+            <div id="detail-view-genders">
+            </div>
+
+        </div>
+
+        <div class="detail-view-separator"></div>
+
+        <div id="detail-view-types"></div>
+    `;
+
+    container.innerHTML = html;
+}
 
 function getEnglishFlavorText(i) {
 
@@ -196,6 +209,8 @@ function renderHeldItem(i) {
 
 function renderTypes(i) {
 
+    let container = document.getElementById('detail-view-types');
+
     let html = '';
 
     const types = basePokedex[i].types;
@@ -206,7 +221,7 @@ function renderTypes(i) {
 
         html += templateType(type);
     }
-    return html;
+    container.innerHTML = html;
 
 }
 
@@ -227,6 +242,8 @@ function templateType(type) {
 // ---------------------------------------
 
 function templateStats(i) {
+
+    let container = document.getElementById('section-stats');
 
     const type = basePokedex[i].types[0].type.name;
 
@@ -268,7 +285,7 @@ function templateStats(i) {
             <div class="stats-bar background-type-${type}" style="width:calc(${calculateStatsBarWidth(i, 5, 200)}% - 56px)"></div>
         </div>`;
 
-    return html;
+    container.innerHTML = html;
 }
 
 function calculateStatsBarWidth(i, statType, maxStat) {
@@ -347,7 +364,7 @@ async function evolutionTree(i) {
         const j = await fetchSinglePokemonReturnIndex(speciesPokedex[i].evolves_from_species.name);
         await evolutionTree(j);
 
-        
+
     } else {
 
         let container = document.getElementById('evolution-tree-root');

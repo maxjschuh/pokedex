@@ -15,7 +15,7 @@
 
 </head>
 
-<body onload="init4()">
+<body onload="init()">
 
     <header>
         <a href="./index.html">
@@ -25,13 +25,11 @@
 
     <main>
 
-        <div id="card-deck"></div>
+        <div class="column-centered">
 
-        <div id="detail-view"></div>
+            <div id="card-deck"></div>
 
-        <div id="loading-animation">
-
-            <svg viewBox="0 0 80 80" width="80" height="80">
+            <svg id="loading-animation" viewBox="0 0 80 80" width="80" height="80">
                 <circle class="circle" cx="20" cy="40" r="6"></circle>
                 <circle class="circle" cx="40" cy="40" r="6"></circle>
                 <circle class="circle" cx="60" cy="40" r="6"></circle>
@@ -39,12 +37,11 @@
 
         </div>
 
+        <!-- <div id="detail-view" class="display-none" w3-include-html="./template_detail_view.html"></div> -->
+
+        <div id="detail-view" w3-include-html="./template_detail_view.html"></div>
 
     </main>
-
-
-
-
 
 
 </body>
