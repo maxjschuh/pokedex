@@ -15,7 +15,7 @@ async function init() {
 
     await includeHTML();
 
-    // await renderDetailView(1);
+    await renderDetailView(1);
 }
 
 // async function loadMore() {

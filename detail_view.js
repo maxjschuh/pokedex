@@ -19,9 +19,9 @@ async function renderDetailView(i) {
 
     templateStats(i);
 
-    // await createMovesArrays();
-    // await renderFirst4Moves(i);
-    // unlockSection('section-moves', 'loading-animation-2');
+    await createMovesArrays();
+    await renderFirst4Moves(i);
+    unlockSection('section-moves', 'loading-animation-2');
 
 }
 
