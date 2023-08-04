@@ -14,7 +14,7 @@ async function renderDetailView(i) {
     renderAboutSection(i, pokemon);
     renderGenders(i);
     renderHeldItem(i);
-    renderTypes(i);
+    document.getElementById('detail-view-types').innerHTML = templateAllTypes(i);
     unlockSection('section-about', 'loading-animation-1');
 
     templateStats(i);
@@ -23,6 +23,9 @@ async function renderDetailView(i) {
     await renderFirst4Moves(i);
     unlockSection('section-moves', 'loading-animation-2');
 
+    await evolutionTree(i);
+    setBorderOfActiveTreeCard(i);
+    unlockSection('section-evolutions', 'loading-animation-3');
 }
 
 function unlockSection(sectionToUnlock, loadingAnimationToHide) {
@@ -207,12 +210,9 @@ function renderHeldItem(i) {
 // detail view - about - types
 //---------------------------------------
 
-function renderTypes(i) {
-
-    let container = document.getElementById('detail-view-types');
+function templateAllTypes(i) {
 
     let html = '';
-
     const types = basePokedex[i].types;
 
     for (let j = 0; j < types.length; j++) {
@@ -221,8 +221,8 @@ function renderTypes(i) {
 
         html += templateType(type);
     }
-    container.innerHTML = html;
 
+    return html;
 }
 
 function templateType(type) {
@@ -430,7 +430,7 @@ async function fetchSinglePokemonReturnIndex(name) {
 
     let index = namesPokedex.indexOf(name);
 
-    if (index == -1) {
+    if (!basePokedex[index]) {
 
         let url = `https://pokeapi.co/api/v2/pokemon/${name}`;
         let response = await fetch(url);
@@ -445,8 +445,6 @@ async function fetchSinglePokemonReturnIndex(name) {
         response = await fetch(url);
         response = await response.json();
         speciesPokedex.splice(index, 1, response);
-
-        namesPokedex.splice(index, 1, basePokedex[index].name);
     }
     return index;
 }
@@ -461,7 +459,7 @@ function templateEvolutionTreeCard(i) {
     <div id="tree-card-${i}" class="evolution-tree-card" onclick="renderDetailView(${i})">
     <img src="${imgUrl}" alt="${name}">
     ${capitalizeFirstCharacter(name)}
-    ${renderTypes(i)}
+    ${templateAllTypes(i)}
 
     </div> `;
 

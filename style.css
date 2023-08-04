@@ -16,6 +16,12 @@ body {
     height: 10000px;
 }
 
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 main {
     display: flex;
     height: 10000px;
@@ -403,4 +409,75 @@ type colors - borders
 
 .border-type-water {
     border-color: #4d90d5;
+}
+
+
+/*----------------------------------
+search
+----------------------------------*/
+
+form {
+    display: flex;
+    gap: 20px;
+}
+
+form div {
+    border: 1px solid #CACACA;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    padding: 4px 6px;
+    gap: 6px;
+}
+
+form img {
+    height: 20px;
+}
+
+form input {
+    border: unset;
+    background-color: transparent;
+    color: #f5f5f5;
+    height: 28px;
+    font-size: 20px;
+    padding: 0;
+    font-family: 'Exo2';
+    font-weight: bold;
+}
+
+form input:hover {
+    cursor: pointer;
+}
+
+form div:has(input:focus-visible) {
+    border-color: #4BC9FF;
+}
+
+form div:has(input:focus-visible) img {
+    filter: invert(81%) sepia(52%) saturate(4015%) hue-rotate(170deg) brightness(102%) contrast(101%);
+}
+
+form input:focus-visible {
+    outline: unset;
+    cursor: text;
+}
+
+form button {
+    border: unset;
+    background: #4BC9FF;
+    font-family: 'Exo2';
+    font-weight: bold;
+    border-radius: 8px;
+    width: 120px;
+    font-size: 20px;
+}
+
+form button:hover {
+    background: #3CA1CC;
+    cursor: pointer;
+}
+
+form button:active {
+    background: #676767;
+    color: #CACACA;
 }
