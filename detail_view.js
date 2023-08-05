@@ -9,7 +9,7 @@ async function renderDetailView(i) {
     renderTopImage(pokemon);
     renderPokemonName(i, pokemon);
 
-    await getPokemonSpeciesData(0, 20);
+    await getPokemonSpeciesData(998, 1040);
 
     renderAboutSection(i, pokemon);
     renderGenders(i);
@@ -26,6 +26,15 @@ async function renderDetailView(i) {
     await evolutionTree(i);
     setBorderOfActiveTreeCard(i);
     unlockSection('section-evolutions', 'loading-animation-3');
+}
+
+async function showDetailView(i) {
+    document.getElementById('detail-view').classList.remove('display-none');
+    await renderDetailView(i);
+}
+
+function hideDetailView() {
+    document.getElementById('detail-view').classList.add('display-none');
 }
 
 function unlockSection(sectionToUnlock, loadingAnimationToHide) {

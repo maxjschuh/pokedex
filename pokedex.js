@@ -15,13 +15,14 @@ async function init() {
 
     await includeHTML();
 
-    await loadAndRenderPokemon(0, 20);
+    await loadAndRenderPokemon(998, 1040);
 
     document.getElementById('loading-animation').classList.add('display-none');
 
     await fetchAllPokemonNames();
 
-    await renderDetailView(1);
+
+    // await renderDetailView(1);
 }
 
 // async function loadMore() {
@@ -120,12 +121,19 @@ async function loadAndRenderPokemon(first, last) {
 
     for (let i = first; i < last; i++) {
 
-        const url = `https://pokeapi.co/api/v2/pokemon/${i + 1}`;
+        let id = i + 1;
+
+        if (i >= 1010) {
+            id = '10' + `${id - 10}`.substring(1);
+        }
+
+        const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
         await fetchData(i, url, basePokedex);
 
         container.innerHTML += templatePokedexCard(i);
     }
 }
+
 
 async function fetchAllPokemonNames() {
 
@@ -153,7 +161,7 @@ async function fetchData(i, url, localJsonToPushTo) {
     let response;
     try {
         response = await fetch(url);
-        
+
     } catch (error) {
         document.getElementById('api-warning').classList.remove('display-none');
         return;
@@ -170,6 +178,11 @@ async function fetchData(i, url, localJsonToPushTo) {
 function convertToTripleDigits(i) {
 
     const idAsString = `${i}`;
+
+    if (idAsString.length > 3) {
+        return idAsString;
+    }
+
     const zeros = '0'.repeat(3 - idAsString.length);
     return zeros + idAsString;
 }
@@ -191,12 +204,16 @@ function templatePokedexCard(i) {
     const pokemon = basePokedex[i];
 
     const name = pokemon.name;
-    const imgUrl = pokemon.sprites.other.home.front_default;
+    let imgUrl = pokemon.sprites.other.home.front_default;
+
+    if (!imgUrl) {
+        imgUrl = pokemon.sprites.other['official-artwork'].front_default;
+    }
 
     const basePokedexId = '#' + convertToTripleDigits(i + 1);
 
     let html = /*html*/ `
-    <div onclick="renderDetailView(${i})">
+    <div onclick="showDetailView(${i})">
         <h2>
         ${capitalizeFirstCharacter(name)} <br>
         ${basePokedexId}</h2>

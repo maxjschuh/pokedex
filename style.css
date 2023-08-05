@@ -25,6 +25,7 @@ header {
 main {
     display: flex;
     height: 10000px;
+    gap: 24px;
 
 }
 
@@ -32,6 +33,7 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: calc(100% - 624px);
 }
 
 #card-deck {
@@ -86,39 +88,53 @@ detail view
 #detail-view {
     display: flex;
     flex-direction: column;
+    align-items: center;
     width: 600px;
+    gap: 24px;
+    padding: 16px;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
 }
 
 nav img {
     width: 16px;
+    object-fit: contain;
 }
 
-#detail-view h2 {
-    display: flex;
-    justify-content: flex-end;
-    width: 100%;
+nav img:hover {
+    cursor: pointer;
+}
+
+#detail-view-pokemon-name {
+    position: unset;
+
 }
 
 #detail-view-top-container {
-
-    width: 70%;
-    max-width: 600px;
     position: relative;
 }
 
 #detail-view-top-image {
     position: absolute;
     top: 0;
-    left: 0;
-    width: 100%;
+    left: calc(50% - 100px);
+    width: 200px;
 }
 
 #pokeball {
     transform: rotate(-135deg);
+    width: 220px;
 }
 
 .detail-view-section {
     background-color: #1F1F1F;
+    border-radius: 24px;
+    width: 100%;
+    padding: 8px;
 }
 
 .detail-view-table-row {
@@ -174,12 +190,20 @@ nav img {
     align-items: center;
 }
 
+#section-evolutions div {
+    width: 30%;
+}
+
 
 .evolution-tree-card {
 
     border: 2px solid grey;
     border-radius: 24px;
+    width: 100% !important;
+}
 
+.evolution-tree-card img {
+    width: 80%;
 }
 
 
