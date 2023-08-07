@@ -99,9 +99,8 @@ async function triggerSearch() {
             newSearchTriggered = false;
             const searchInput = searchInputs[i];
             await search(searchInput);
-            
+
             if (!searchInput) {
-                document.getElementById('search-warning').classList.add('display-none');
                 document.getElementById('button-show-more').classList.remove('display-none');
                 currentCardDeckSize = 20;
             }
@@ -118,33 +117,41 @@ async function search(searchInput) {
 
     let container = document.getElementById('card-deck');
     container.innerHTML = '';
-    document.getElementById('search-warning').classList.add('display-none');
-
 
     for (let i = 0; i < namesPokedex.length; i++) {
         const name = namesPokedex[i];
 
         if (newSearchTriggered) {
             return;
-            
-        } else if (searchResultsCount == 20) {
-            document.getElementById('search-warning').classList.remove('display-none');
+
+        } else if (!searchInput && searchResultsCount == 20) {
             document.getElementById('loading-animation').classList.add('display-none');
             return;
 
         } else if (name.includes(searchInput)) {
 
-            await addSinglePokemonToCardDeck(container, name);
+            await addSinglePokemonToCardDeck(container, i);
         }
     }
     document.getElementById('loading-animation').classList.add('display-none');
 }
 
-async function addSinglePokemonToCardDeck(container, name) {
+async function addSinglePokemonToCardDeck(container, i) {
 
     searchResultsCount++;
-    let index = await fetchSinglePokemonReturnIndex(name);
-    container.innerHTML += templatePokedexCard(index);
+
+    let id = i + 1;
+
+    if (i >= 1010) {
+        id = '10' + `${id - 10}`.substring(1);
+    }
+
+    if (!basePokedex[i]) {
+        const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
+        await fetchData(i, url, basePokedex);
+    }
+
+    container.innerHTML += templatePokedexCard(i);
 
 }
 
@@ -174,7 +181,7 @@ async function loadAndRenderPokemon(first, last) {
 
         if (!basePokedex[i]) {
             const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
-            await fetchData(i, url, basePokedex);            
+            await fetchData(i, url, basePokedex);
         }
 
         container.innerHTML += templatePokedexCard(i);
@@ -184,7 +191,14 @@ async function loadAndRenderPokemon(first, last) {
 
 async function fetchAllPokemonNames() {
 
-    let response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0');
+    let response;
+    try {
+        response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0');
+
+    } catch (error) {
+        document.getElementById('api-warning').classList.remove('display-none');
+        return;
+    }
     let responseJson = await response.json();
 
     for (let i = 0; i < responseJson.results.length; i++) {

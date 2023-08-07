@@ -12,25 +12,61 @@ body {
     margin: 0;
     font-family: 'Exo2';
     background-color: #191919;
-    color: white;
+    color: #f5f5f5;
 }
 
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    height: 100px;
+    width: calc(100% - 48px);
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #191919;
+    padding: 24px;
+    z-index: 9;
+    box-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
 }
+
+header a {
+    height: 100%;
+}
+
+header a img {
+    height: 100%;
+}
+
+nav {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+}
+
+nav a {
+    text-decoration: none;
+    color: #CACACA;
+    font-size: 20px;
+}
+
+nav a:hover {
+    text-decoration: underline
+}
+
+nav a:active {
+    color: #3CA1CC;
+}
+
 
 main {
     display: flex;
-    gap: 24px;
-
-}
-
-#main-left-column {
-    display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 24px;
+    gap: 24px;
+    margin-top: 148px;
 }
 
 #card-deck {
@@ -38,7 +74,6 @@ main {
     justify-content: center;
     flex-wrap: wrap;
     gap: 24px;
-    align-content: flex-start;
 }
 
 #card-deck div {
@@ -57,6 +92,12 @@ main {
     cursor: pointer;
 }
 
+#card-deck div:active {
+    background-color: #3CA1CC;
+
+    /* filter: brightness(50%); */
+}
+
 #card-deck img {
     width: 160px;
     height: 160px;
@@ -66,10 +107,11 @@ main {
 }
 
 h2 {
-    color: white;
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 8px;
+    left: 8px;
+    font-size: 24px;
+    margin: 0;
 }
 
 #card-deck div:hover {
@@ -82,6 +124,10 @@ h2 {
     display: none !important;
 }
 
+.detail-view-opened {
+    width: calc(100% - 672px);
+}
+
 /*----------------------------------
 detail view
 ----------------------------------*/
@@ -90,32 +136,42 @@ detail view
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 600px;
+    width: 552px;
     gap: 24px;
-    padding: 16px;
+    padding: 24px;
+    padding-right: 36px;
 
     position: fixed;
+    overflow: scroll;
+    top: 148px;
     right: 0;
+    height: 100%;
 }
 
-nav {
+#detail-view-headline {
     display: flex;
     justify-content: space-between;
     width: 100%;
 }
 
-nav img {
-    width: 16px;
+#detail-view-headline img {
+    width: 20px;
     object-fit: contain;
+    padding: 8px 8px 8px 0;
 }
 
-nav img:hover {
+#detail-view-headline img:hover {
     cursor: pointer;
+    filter: invert(0%) sepia(100%) saturate(4%) hue-rotate(220deg) brightness(107%) contrast(101%);
+}
+
+#detail-view-headline img:active {
+    filter: invert(60%) sepia(45%) saturate(710%) hue-rotate(155deg) brightness(87%) contrast(81%);
+    /* filter: brightness(80%); */
 }
 
 #detail-view-pokemon-name {
     position: unset;
-
 }
 
 #detail-view-top-container {
@@ -135,10 +191,35 @@ nav img:hover {
 }
 
 .detail-view-section {
+    display: flex;
+    flex-direction: column;
     background-color: #1F1F1F;
     border-radius: 24px;
     width: 100%;
-    padding: 8px;
+    padding: 16px;
+    gap: 16px;
+}
+
+h3 {
+    font-size: 20px;
+    margin: 0;
+}
+
+.detail-view-section p {
+    margin: 0;
+    font-size: 16px;
+}
+
+#section-about {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+#section-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
 .detail-view-table-row {
@@ -161,33 +242,52 @@ nav img:hover {
 }
 
 .detail-view-separator {
-    height: 2px;
+    height: 1px;
     background-color: #CACACA;
 }
 
 #detail-view-types {
     display: flex;
-    gap: 16px;
 }
 
 .detail-view-type-icon {
     display: flex;
-    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
     border-radius: 16px;
-    padding: 2px 8px 2px 2px;
+    padding: 2px 16px 2px 8px;
     width: fit-content !important;
     height: 24px;
-    margin: 8px 8px 0 8px;
+    margin: 8px 8px 0 0;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: center;
 }
 
 .detail-view-type-icon img {
     width: 24px !important;
 }
 
-#detail-view p {
-    color: white;
+#section-moves {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 16px;
 }
 
+#section-moves .detail-view-type-icon {
+    margin: 0 16px;
+    font-weight: normal;
+    text-align: justify;
+}
+
+#section-moves div {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-weight: bold;
+}
 
 #section-evolutions {
     display: flex;
@@ -199,26 +299,59 @@ nav img:hover {
     width: 30%;
 }
 
-
 .evolution-tree-card {
 
     border: 2px solid grey;
-    border-radius: 24px;
+    border-radius: 12px;
     width: 100% !important;
 
     display: flex;
     flex-direction: column;
     align-items: center;
 
-    height: 300px;
+    height: fit-content;
+    gap: 8px;
+    padding: 16px 0;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.evolution-tree-card img {
+
+    margin-bottom: 8px;
+}
+
+.evolution-tree-card .detail-view-type-icon {
+    margin: 0;
+    /* margin-bottom: 16px; */
+}
+
+.evolution-tree-card .detail-view-type-icon img {
+    margin: 0;
 }
 
 .evolution-tree-card:hover {
     cursor: pointer;
 }
 
+.evolution-tree-card:active {
+    /* filter: brightness(50%); */
+    border-color: #3CA1CC;
+}
+
 .evolution-tree-card img {
     width: 80%;
+}
+
+#flavor-text {
+    font-family: 'Exo2 italic';
+    margin-bottom: 8px;
+}
+
+#detail-view-bottom-placeholder {
+    height: 10px;
+    width: 100%;
+    margin-bottom: 160px;
 }
 
 
@@ -254,6 +387,101 @@ detail view - stats section
 
     border-radius: 16px;
 } */
+
+
+/*----------------------------------
+search
+----------------------------------*/
+
+form {
+    display: flex;
+    gap: 20px;
+}
+
+form div {
+    border: 2px solid #CACACA;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    padding: 4px 6px;
+    gap: 6px;
+}
+
+form img {
+    height: 20px;
+}
+
+form input {
+    border: unset;
+    background-color: transparent;
+    color: #f5f5f5;
+    height: 28px;
+    font-size: 20px;
+    padding: 0;
+    font-family: 'Exo2';
+    font-weight: bold;
+}
+
+form input:hover {
+    cursor: pointer;
+}
+
+form div:has(input:focus-visible) {
+    border-color: #4BC9FF;
+}
+
+form div:has(input:focus-visible) img {
+    filter: invert(81%) sepia(52%) saturate(4015%) hue-rotate(170deg) brightness(102%) contrast(101%);
+}
+
+form input:focus-visible {
+    outline: unset;
+    cursor: text;
+}
+
+button {
+    border: unset;
+    background: #4BC9FF;
+    font-family: 'Exo2';
+    font-weight: bold;
+    border-radius: 8px;
+    width: fit-content;
+    font-size: 20px;
+    padding: 8px 16px;
+    margin: 24px;
+}
+
+button:hover {
+    background: #3CA1CC;
+    cursor: pointer;
+}
+
+button:active {
+    background: #676767;
+    color: #CACACA;
+}
+
+/* ----------------------------------
+custom scrollbar
+---------------------------------- */
+
+::-webkit-scrollbar {
+    width: 14px;
+}
+
+::-webkit-scrollbar-track {
+    background: #191919;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 12px;
+    background: #CACACA;
+
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #f5f5f5;
+}
 
 
 
@@ -294,6 +522,28 @@ loading animation
     100% {
         opacity: 0;
     }
+}
+
+/*----------------------------------
+imprint / data protection
+----------------------------------*/
+
+#imprint-main {
+    margin: 24px;
+    margin-top: 172px;
+}
+
+#imprint-main a {
+    color: unset;
+}
+
+#imprint-main h2 {
+    position: unset;
+    margin: 24px 0;
+}
+
+#imprint-main a:active {
+    color: #3CA1CC;
 }
 
 
@@ -450,75 +700,28 @@ type colors - borders
     border-color: #4d90d5;
 }
 
+/* ----------------------------------
+responsive design
+---------------------------------- */
 
-/*----------------------------------
-search
-----------------------------------*/
+@media (max-width: 700px) {
 
-form {
-    display: flex;
-    gap: 20px;
+    .detail-view-opened {
+        display: none !important;
+    }
+
+    #detail-view {
+        width: 100%;
+    }
 }
 
-form div {
-    border: 1px solid #CACACA;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    padding: 4px 6px;
-    gap: 6px;
+
+@media (max-width: 600px) {
+
+    #imprint-main h2 {
+        font-size: 18px;
+    }
 }
 
-form img {
-    height: 20px;
-}
 
-form input {
-    border: unset;
-    background-color: transparent;
-    color: #f5f5f5;
-    height: 28px;
-    font-size: 20px;
-    padding: 0;
-    font-family: 'Exo2';
-    font-weight: bold;
-}
 
-form input:hover {
-    cursor: pointer;
-}
-
-form div:has(input:focus-visible) {
-    border-color: #4BC9FF;
-}
-
-form div:has(input:focus-visible) img {
-    filter: invert(81%) sepia(52%) saturate(4015%) hue-rotate(170deg) brightness(102%) contrast(101%);
-}
-
-form input:focus-visible {
-    outline: unset;
-    cursor: text;
-}
-
-button {
-    border: unset;
-    background: #4BC9FF;
-    font-family: 'Exo2';
-    font-weight: bold;
-    border-radius: 8px;
-    width: fit-content;
-    font-size: 20px;
-    padding: 8px 16px;
-    margin: 24px;
-}
-
-button:hover {
-    background: #3CA1CC;
-    cursor: pointer;
-}
-
-button:active {
-    background: #676767;
-    color: #CACACA;
-}

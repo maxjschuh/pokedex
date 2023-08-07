@@ -9,8 +9,6 @@ async function renderDetailView(i) {
     renderTopImage(pokemon);
     renderPokemonName(i, pokemon);
 
-    // await getPokemonSpeciesData(0, 20);
-
     const url = basePokedex[i].species.url;
     await fetchData(i, url, speciesPokedex);
 
@@ -33,14 +31,14 @@ async function renderDetailView(i) {
 
 async function showDetailView(i) {
     document.getElementById('detail-view').classList.remove('display-none');
-    document.getElementById('main-left-column').style = 'width: calc(100% - 624px)';
+    document.getElementById('main').classList.add('detail-view-opened');
 
     await renderDetailView(i);
 }
 
 function hideDetailView() {
     document.getElementById('detail-view').classList.add('display-none');
-    document.getElementById('main-left-column').style = '';
+    document.getElementById('main').classList.remove('detail-view-opened');
 }
 
 function unlockSection(sectionToUnlock, loadingAnimationToHide) {
@@ -81,7 +79,7 @@ function renderAboutSection(i, pokemon) {
 
     let html = /*html*/ `
 
-        <p>${flavorText}</p>
+        <p id="flavor-text">${flavorText}</p>
 
         <div class="detail-view-table-row">
 
@@ -333,12 +331,17 @@ async function renderFirst4Moves(i) {
     const pokemon = basePokedex[i];
 
     for (let j = 0; j < 4; j++) {
-        const move = pokemon.moves[j].move;
 
         const id = `detail-view-move-${j}`;
         let container = document.getElementById(id);
 
-        container.innerHTML = await templateMove(move.name, move.url);
+        if (pokemon.moves[j]) {
+            const move = pokemon.moves[j].move;
+            container.innerHTML = await templateMove(move.name, move.url);
+
+        } else {
+            container.innerHTML = 'No data';
+        }
     }
 }
 
@@ -374,7 +377,6 @@ async function fetchMoveType(index, url) {
 
 async function evolutionTree(i) {
 
-
     if (speciesPokedex[i].evolves_from_species) {
 
         const j = await fetchSinglePokemonReturnIndex(speciesPokedex[i].evolves_from_species.name);
@@ -393,9 +395,14 @@ async function evolutionTree(i) {
 
 function setBorderOfActiveTreeCard(i) {
 
-    const id = `tree-card-${i}`;
-    const borderClass = `border-type-${basePokedex[i].types[0].type.name}`;
-    document.getElementById(id).classList.add(borderClass);
+    try {
+        const id = `tree-card-${i}`;
+        const borderClass = `border-type-${basePokedex[i].types[0].type.name}`;
+        document.getElementById(id).classList.add(borderClass);
+
+    } catch (error) {
+        return;
+    }
 }
 
 async function getEvolutionChainData(i) {

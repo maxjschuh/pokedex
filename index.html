@@ -22,126 +22,134 @@
             <img src="./img/Pokédex_logo.svg" alt="">
         </a>
 
-        <form oninput="startNewSearch(); return false;">
+        <nav>
+            <form oninput="startNewSearch()">
 
-            <p id="search-warning" class="display-none">Too many pokemon fit your search input to show them all!</p>
+                <p id="api-warning" class="display-none">The API is not responding. Please try again in two minutes.</p>
 
-            <p id="api-warning" class="display-none">The API is not responding. Please try again in two minutes.</p>
+                <div>
+                    <img src="./img/magnifying_glass.png" alt="search input icon">
 
-            <div>
-                <img src="./img/magnifying_glass.png" alt="search input icon">
+                    <input id="search-input" placeholder="Search pokemon..." type="text" required>
+                </div>
+            </form>
 
-                <input id="search-input" placeholder="Search pokemon..." type="text" required>
-            </div>
-        </form>
+            <a href="./imprint.html">Imprint</a>
+
+            <a href="./data_protection.html">Data protection</a>
+
+        </nav>
 
     </header>
 
-    <main>
+    <main id="main">
 
-        <div id="main-left-column">
+        <div id="card-deck"></div>
 
-            <div id="card-deck"></div>
+        <svg id="loading-animation" viewBox="0 0 80 80" width="80" height="80">
+            <circle class="circle" cx="20" cy="40" r="6"></circle>
+            <circle class="circle" cx="40" cy="40" r="6"></circle>
+            <circle class="circle" cx="60" cy="40" r="6"></circle>
+        </svg>
 
-            <svg id="loading-animation" viewBox="0 0 80 80" width="80" height="80">
+        <button id="button-show-more" onclick="showMore()" class="display-none">Show more</button>
+
+    </main>
+
+
+    <div id="detail-view" class="display-none">
+
+
+        <div id="detail-view-headline">
+            <img onclick="hideDetailView()" src="./img/nav_arrow.png" alt="">
+            <h2 id="detail-view-pokemon-name"></h2>
+        </div>
+
+
+        <div id="detail-view-top-container">
+            <img id="pokeball" src="./img/pokeball.png" alt="">
+            <img id="detail-view-top-image" src="" alt="">
+        </div>
+
+
+
+        <div class="detail-view-section">
+            <h3>About</h3>
+            <div id="section-about" class="display-none"></div>
+
+            <svg id="loading-animation-1" viewBox="0 0 80 80" width="80" height="80">
+                <circle class="circle" cx="20" cy="40" r="6"></circle>
+                <circle class="circle" cx="40" cy="40" r="6"></circle>
+                <circle class="circle" cx="60" cy="40" r="6"></circle>
+            </svg>
+        </div>
+
+
+        <div class="detail-view-section">
+            <h3>Stats</h3>
+            <div id="section-stats"></div>
+        </div>
+
+
+        <div class="detail-view-section">
+            <h3>Moves</h3>
+
+            <div id="section-moves" class="display-none">
+
+                <div id="detail-view-move-0"></div>
+
+                <div class="detail-view-separator"></div>
+
+                <div id="detail-view-move-1"></div>
+
+                <div class="detail-view-separator"></div>
+
+                <div id="detail-view-move-2"></div>
+
+                <div class="detail-view-separator"></div>
+
+                <div id="detail-view-move-3"></div>
+
+            </div>
+
+            <svg id="loading-animation-2" viewBox="0 0 80 80" width="80" height="80">
                 <circle class="circle" cx="20" cy="40" r="6"></circle>
                 <circle class="circle" cx="40" cy="40" r="6"></circle>
                 <circle class="circle" cx="60" cy="40" r="6"></circle>
             </svg>
 
-            <button id="button-show-more" onclick="showMore()" class="display-none">Show more</button>
+        </div>
 
+
+        <div class="detail-view-section">
+            <h3>Evolutions</h3>
+
+            <div id="section-evolutions" class="display-none">
+
+                <div id="evolution-tree-root"></div>
+                <div id="evolution-tree-first-branch"></div>
+                <div id="evolution-tree-second-branch"></div>
+
+            </div>
+
+            <svg id="loading-animation-3" viewBox="0 0 80 80" width="80" height="80">
+                <circle class="circle" cx="20" cy="40" r="6"></circle>
+                <circle class="circle" cx="40" cy="40" r="6"></circle>
+                <circle class="circle" cx="60" cy="40" r="6"></circle>
+            </svg>
 
         </div>
 
-        <!-- <div id="detail-view" class="display-none" w3-include-html="./template_detail_view.html"></div> -->
-
-        <div id="detail-view" class="display-none">
-
-            <nav>
-                <img onclick="hideDetailView()" src="./img/nav_arrow.png" alt="">
-                <h2 id="detail-view-pokemon-name"></h2>
-            </nav>
-            
-            
-            <div id="detail-view-top-container">
-                <img id="pokeball" src="./img/pokeball.png" alt="">
-                <img id="detail-view-top-image" src="" alt="">
-            </div>
-            
-            
-            
-            <div class="detail-view-section">
-                <h3>About</h3>
-                <div id="section-about" class="display-none"></div>
-            
-                <svg id="loading-animation-1" viewBox="0 0 80 80" width="80" height="80">
-                    <circle class="circle" cx="20" cy="40" r="6"></circle>
-                    <circle class="circle" cx="40" cy="40" r="6"></circle>
-                    <circle class="circle" cx="60" cy="40" r="6"></circle>
-                </svg>
-            </div>
-            
-            
-            <div class="detail-view-section">
-                <h3>Stats</h3>
-                <div id="section-stats"></div>
-            </div>
-            
-            
-            <div class="detail-view-section">
-                <h3>Moves</h3>
-            
-                <div id="section-moves" class="display-none">
-            
-                    <div id="detail-view-move-0"></div>
-            
-                    <div class="detail-view-separator"></div>
-            
-                    <div id="detail-view-move-1"></div>
-            
-                    <div class="detail-view-separator"></div>
-            
-                    <div id="detail-view-move-2"></div>
-            
-                    <div class="detail-view-separator"></div>
-            
-                    <div id="detail-view-move-3"></div>
-            
-                </div>
-            
-                <svg id="loading-animation-2" viewBox="0 0 80 80" width="80" height="80">
-                    <circle class="circle" cx="20" cy="40" r="6"></circle>
-                    <circle class="circle" cx="40" cy="40" r="6"></circle>
-                    <circle class="circle" cx="60" cy="40" r="6"></circle>
-                </svg>
-            
-            </div>
-            
-            <div class="detail-view-section">
-                <h3>Evolutions</h3>
-            
-                <div id="section-evolutions" class="display-none">
-            
-                    <div id="evolution-tree-root"></div>
-                    <div id="evolution-tree-first-branch"></div>
-                    <div id="evolution-tree-second-branch"></div>
-            
-                </div>
-            
-                <svg id="loading-animation-3" viewBox="0 0 80 80" width="80" height="80">
-                    <circle class="circle" cx="20" cy="40" r="6"></circle>
-                    <circle class="circle" cx="40" cy="40" r="6"></circle>
-                    <circle class="circle" cx="60" cy="40" r="6"></circle>
-                </svg>
-            
-            </div>
-
-
-
+        <div id="detail-view-bottom-placeholder">
         </div>
 
-    </main>
+
+
+    </div>
+
+
+
+
 
 
 </body>
