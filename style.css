@@ -13,7 +13,6 @@ body {
     font-family: 'Exo2';
     background-color: #191919;
     color: white;
-    height: 10000px;
 }
 
 header {
@@ -24,16 +23,14 @@ header {
 
 main {
     display: flex;
-    height: 10000px;
     gap: 24px;
 
 }
 
-.column-centered {
+#main-left-column {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: calc(100% - 624px);
 }
 
 #card-deck {
@@ -54,6 +51,10 @@ main {
     align-items: center;
     justify-content: center;
     position: relative;
+}
+
+#card-deck div:hover {
+    cursor: pointer;
 }
 
 #card-deck img {
@@ -92,6 +93,9 @@ detail view
     width: 600px;
     gap: 24px;
     padding: 16px;
+
+    position: fixed;
+    right: 0;
 }
 
 nav {
@@ -171,12 +175,13 @@ nav img:hover {
     gap: 8px;
     border-radius: 16px;
     padding: 2px 8px 2px 2px;
-    width: fit-content;
+    width: fit-content !important;
     height: 24px;
+    margin: 8px 8px 0 8px;
 }
 
 .detail-view-type-icon img {
-    width: 24px;
+    width: 24px !important;
 }
 
 #detail-view p {
@@ -200,6 +205,16 @@ nav img:hover {
     border: 2px solid grey;
     border-radius: 24px;
     width: 100% !important;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    height: 300px;
+}
+
+.evolution-tree-card:hover {
+    cursor: pointer;
 }
 
 .evolution-tree-card img {
@@ -486,22 +501,24 @@ form input:focus-visible {
     cursor: text;
 }
 
-form button {
+button {
     border: unset;
     background: #4BC9FF;
     font-family: 'Exo2';
     font-weight: bold;
     border-radius: 8px;
-    width: 120px;
+    width: fit-content;
     font-size: 20px;
+    padding: 8px 16px;
+    margin: 24px;
 }
 
-form button:hover {
+button:hover {
     background: #3CA1CC;
     cursor: pointer;
 }
 
-form button:active {
+button:active {
     background: #676767;
     color: #CACACA;
 }

@@ -31,17 +31,15 @@
             <div>
                 <img src="./img/magnifying_glass.png" alt="search input icon">
 
-                <input id="search-input" placeholder="Type pokemon name..." type="text" required>
+                <input id="search-input" placeholder="Search pokemon..." type="text" required>
             </div>
-
-            <button type="submit">Search</button>
         </form>
 
     </header>
 
     <main>
 
-        <div class="column-centered">
+        <div id="main-left-column">
 
             <div id="card-deck"></div>
 
@@ -51,6 +49,9 @@
                 <circle class="circle" cx="60" cy="40" r="6"></circle>
             </svg>
 
+            <button id="button-show-more" onclick="showMore()" class="display-none">Show more</button>
+
+
         </div>
 
         <!-- <div id="detail-view" class="display-none" w3-include-html="./template_detail_view.html"></div> -->
@@ -58,7 +59,7 @@
         <div id="detail-view" class="display-none">
 
             <nav>
-                <img src="./img/nav_arrow.png" alt="">
+                <img onclick="hideDetailView()" src="./img/nav_arrow.png" alt="">
                 <h2 id="detail-view-pokemon-name"></h2>
             </nav>
             

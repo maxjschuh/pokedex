@@ -1,9 +1,11 @@
 let basePokedex = Array(1281).fill(null);
 let speciesPokedex = Array(1281).fill(null);
 let namesPokedex = Array(1281).fill(null);
-let evolutionChains = Array(530).fill(null);
+let evolutionChains = Array(1281).fill(null);
 
 let searchResultsCount;
+let currentCardDeckSize;
+
 
 
 
@@ -15,22 +17,32 @@ async function init() {
 
     await includeHTML();
 
-    await loadAndRenderPokemon(998, 1040);
-
-    document.getElementById('loading-animation').classList.add('display-none');
+    await loadAndRenderPokemon(0, 20);
+    currentCardDeckSize = 20;
 
     await fetchAllPokemonNames();
 
-
-    // await renderDetailView(1);
+    document.getElementById('loading-animation').classList.add('display-none');
+    document.getElementById('button-show-more').classList.remove('display-none');
 }
 
-// async function loadMore() {
 
-//     await fetchData(21, 41);
-//     await fetchDataPokemonSpecies(21, 41);
-//     render();
-// }
+async function showMore() {
+
+    document.getElementById('button-show-more').classList.add('display-none');
+    document.getElementById('loading-animation').classList.remove('display-none');
+
+
+    const first = currentCardDeckSize;
+    const last = currentCardDeckSize + 20;
+
+    await loadAndRenderPokemon(first, last);
+    currentCardDeckSize = last;
+
+    document.getElementById('loading-animation').classList.add('display-none');
+    document.getElementById('button-show-more').classList.remove('display-none');
+}
+
 
 
 
@@ -52,33 +64,69 @@ async function includeHTML() {
     }
 }
 
-let stopFlag = false;
 //---------------------------------------
 // search function
 //---------------------------------------
 
+let searchInputs = [];
+let ongoingSearch = false;
+let newSearchTriggered = false;
+
+
 async function startNewSearch() {
 
     document.getElementById('loading-animation').classList.remove('display-none');
-    stopFlag = true;
-    setTimeout(await search(), 400);
+    document.getElementById('button-show-more').classList.add('display-none');
+
+
+    const searchInput = validateSearchInput();
+    searchInputs.push(searchInput);
+    newSearchTriggered = true;
+
+
+    if (!ongoingSearch) {
+        triggerSearch();
+    }
 }
 
-async function search() {
+async function triggerSearch() {
+    ongoingSearch = true;
 
-    stopFlag = false;
+    for (let i = 0; i < searchInputs.length; i++) {
+
+        if (i == (searchInputs.length - 1)) {
+
+            newSearchTriggered = false;
+            const searchInput = searchInputs[i];
+            await search(searchInput);
+            
+            if (!searchInput) {
+                document.getElementById('search-warning').classList.add('display-none');
+                document.getElementById('button-show-more').classList.remove('display-none');
+                currentCardDeckSize = 20;
+            }
+        }
+    }
+    searchInputs = [];
+    ongoingSearch = false;
+}
+
+
+async function search(searchInput) {
+
     searchResultsCount = 0;
-    const searchInput = validateSearchInput();
 
     let container = document.getElementById('card-deck');
     container.innerHTML = '';
+    document.getElementById('search-warning').classList.add('display-none');
+
 
     for (let i = 0; i < namesPokedex.length; i++) {
         const name = namesPokedex[i];
 
-        if (stopFlag) {
+        if (newSearchTriggered) {
             return;
-
+            
         } else if (searchResultsCount == 20) {
             document.getElementById('search-warning').classList.remove('display-none');
             document.getElementById('loading-animation').classList.add('display-none');
@@ -96,16 +144,14 @@ async function addSinglePokemonToCardDeck(container, name) {
 
     searchResultsCount++;
     let index = await fetchSinglePokemonReturnIndex(name);
+    container.innerHTML += templatePokedexCard(index);
 
-    if (!stopFlag) {
-        container.innerHTML += templatePokedexCard(index);
-    }
 }
 
 function validateSearchInput() {
 
     const searchInput = document.getElementById('search-input').value;
-    return searchInput.trim().toLowerCase();
+    return searchInput.trim().toLowerCase().replace(/['"`]/g, '');
 }
 
 
@@ -117,7 +163,6 @@ function validateSearchInput() {
 async function loadAndRenderPokemon(first, last) {
 
     let container = document.getElementById('card-deck');
-    container.innerHTML = '';
 
     for (let i = first; i < last; i++) {
 
@@ -127,8 +172,10 @@ async function loadAndRenderPokemon(first, last) {
             id = '10' + `${id - 10}`.substring(1);
         }
 
-        const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
-        await fetchData(i, url, basePokedex);
+        if (!basePokedex[i]) {
+            const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
+            await fetchData(i, url, basePokedex);            
+        }
 
         container.innerHTML += templatePokedexCard(i);
     }
@@ -202,14 +249,8 @@ function capitalizeFirstCharacter(inputString) {
 function templatePokedexCard(i) {
 
     const pokemon = basePokedex[i];
-
     const name = pokemon.name;
-    let imgUrl = pokemon.sprites.other.home.front_default;
-
-    if (!imgUrl) {
-        imgUrl = pokemon.sprites.other['official-artwork'].front_default;
-    }
-
+    const imgUrl = returnImageUrl(pokemon);
     const basePokedexId = '#' + convertToTripleDigits(i + 1);
 
     let html = /*html*/ `
@@ -222,4 +263,20 @@ function templatePokedexCard(i) {
     `;
 
     return html;
+}
+
+
+function returnImageUrl(pokemon) {
+
+    let imgUrl = pokemon.sprites.other.home.front_default;
+
+    if (!imgUrl) {
+        imgUrl = pokemon.sprites.other['official-artwork'].front_default;
+    }
+
+    if (!imgUrl) {
+        imgUrl = './img/no_image.png';
+    }
+
+    return imgUrl;
 }

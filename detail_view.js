@@ -9,7 +9,10 @@ async function renderDetailView(i) {
     renderTopImage(pokemon);
     renderPokemonName(i, pokemon);
 
-    await getPokemonSpeciesData(998, 1040);
+    // await getPokemonSpeciesData(0, 20);
+
+    const url = basePokedex[i].species.url;
+    await fetchData(i, url, speciesPokedex);
 
     renderAboutSection(i, pokemon);
     renderGenders(i);
@@ -30,11 +33,14 @@ async function renderDetailView(i) {
 
 async function showDetailView(i) {
     document.getElementById('detail-view').classList.remove('display-none');
+    document.getElementById('main-left-column').style = 'width: calc(100% - 624px)';
+
     await renderDetailView(i);
 }
 
 function hideDetailView() {
     document.getElementById('detail-view').classList.add('display-none');
+    document.getElementById('main-left-column').style = '';
 }
 
 function unlockSection(sectionToUnlock, loadingAnimationToHide) {
@@ -46,7 +52,7 @@ function unlockSection(sectionToUnlock, loadingAnimationToHide) {
 
 function renderTopImage(pokemon) {
 
-    const imgUrl = pokemon['sprites']['other']['home']['front_default'];
+    const imgUrl = returnImageUrl(pokemon);
     document.getElementById('detail-view-top-image').src = `${imgUrl}`;
 }
 
@@ -368,6 +374,7 @@ async function fetchMoveType(index, url) {
 
 async function evolutionTree(i) {
 
+
     if (speciesPokedex[i].evolves_from_species) {
 
         const j = await fetchSinglePokemonReturnIndex(speciesPokedex[i].evolves_from_species.name);
@@ -444,25 +451,25 @@ async function fetchSinglePokemonReturnIndex(name) {
         let url = `https://pokeapi.co/api/v2/pokemon/${name}`;
         let response = await fetch(url);
         response = await response.json();
-
-        index = response.id - 1;
-
         basePokedex.splice(index, 1, response);
+    }
+
+    if (!speciesPokedex[index]) {
 
         url = basePokedex[index].species.url;
-
         response = await fetch(url);
         response = await response.json();
         speciesPokedex.splice(index, 1, response);
     }
+
     return index;
 }
 
 function templateEvolutionTreeCard(i) {
 
-    const name = basePokedex[i].name;
-
-    const imgUrl = basePokedex[i].sprites.other.home.front_default;
+    const pokemon = basePokedex[i];
+    const name = pokemon.name;
+    const imgUrl = returnImageUrl(pokemon);
 
     let html = /*html*/ `
     <div id="tree-card-${i}" class="evolution-tree-card" onclick="renderDetailView(${i})">
