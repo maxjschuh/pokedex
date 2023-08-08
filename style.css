@@ -66,12 +66,17 @@ nav a:active {
 
 
 main {
+    position: fixed;
+    top: 0;
+    left: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 24px;
     gap: 24px;
     margin-top: 158px;
+    overflow-y: scroll;
+    height: 100%;
 }
 
 #card-deck {
@@ -150,6 +155,18 @@ detail view
     top: 158px;
     right: 0;
     height: 100%;
+
+    animation: slideInFromRight 250ms ease forwards;
+}
+
+@keyframes slideInFromRight {
+    0% {
+        right: -220px;
+    }
+
+    100% {
+        right: 0;
+    }
 }
 
 #detail-view-headline {
@@ -260,8 +277,8 @@ h3 {
     align-items: center;
     justify-content: center;
     gap: 2px;
-    border-radius: 16px;
-    padding: 2px 16px 2px 8px;
+    border-radius: 12px;
+    padding: 2px 8px 2px 4px;
     width: fit-content !important;
     height: 24px;
     margin: 8px 8px 0 0;
@@ -328,6 +345,7 @@ h3 {
 
 .evolution-tree-card .detail-view-type-icon {
     margin: 0;
+    font-weight: normal;
 }
 
 .evolution-tree-card .detail-view-type-icon img {
@@ -351,7 +369,7 @@ h3 {
     margin-bottom: 8px;
 }
 
-#detail-view-bottom-placeholder {
+.bottom-placeholder {
     height: 10px;
     width: 100%;
     margin-bottom: 180px;
@@ -379,17 +397,6 @@ detail view - stats section
     background-color: #535353;
     border-radius: 16px;
 }
-
-/* .stats-bar-colored {
-    position: absolute;
-    top: 0;
-    left: 40px;
-
-    height: 100%;
-    width: calc(50% - 40px);
-
-    border-radius: 16px;
-} */
 
 
 /*----------------------------------
@@ -803,6 +810,10 @@ responsive design
 
     #imprint-main {
         margin-top: 214px;
+    }
+
+    .bottom-placeholder {
+        margin-bottom: 210px;
     }
 }
 

@@ -8,10 +8,8 @@
     <title>Pokedex</title>
 
     <link rel="stylesheet" href="./style.css">
-
-
-    <script src="./pokedex.js"></script>
-    <script src="./detail_view.js"></script>
+    <script src="./js/pokedex.js"></script>
+    <script src="./js/detail_view.js"></script>
 
 </head>
 
@@ -57,11 +55,13 @@
 
         <button id="button-show-more" onclick="showMore()" class="display-none">Show more</button>
 
+        <div class="bottom-placeholder">
+        </div>
+
     </main>
 
 
     <div id="detail-view" class="display-none">
-
 
         <div id="detail-view-headline">
             <img onclick="hideDetailView()" src="./img/nav_arrow.png" alt="">
@@ -73,8 +73,6 @@
             <img id="pokeball" src="./img/pokeball.png" alt="">
             <img id="detail-view-top-image" src="" alt="">
         </div>
-
-
 
         <div class="detail-view-section">
             <h3>About</h3>
@@ -143,17 +141,10 @@
 
         </div>
 
-        <div id="detail-view-bottom-placeholder">
+        <div class="bottom-placeholder">
         </div>
 
-
-
     </div>
-
-
-
-
-
 
 </body>
 
