@@ -3,9 +3,7 @@
  */
 async function startNewSearch() {
 
-    document.getElementById('loading-animation').classList.remove('display-none');
-    document.getElementById('button-show-more').classList.add('display-none');
-
+    toggleShowMoreButton();
 
     const searchInput = validateSearchInput();
     searchInputs.push(searchInput);
@@ -42,8 +40,7 @@ async function triggerSearch() {
             await search(searchInputs[i]);
 
             if (!searchInputs[i]) {
-                document.getElementById('button-show-more').classList.remove('display-none');
-                currentCardDeckSize = 20;
+                toggleShowMoreButton(true);
             }
         }
     }
@@ -66,8 +63,7 @@ async function search(searchInput) {
 
         if (newSearchTriggered) return; 
         
-        else if (!searchInput && searchResultsCount == 20) {
-            document.getElementById('loading-animation').classList.add('display-none');
+        else if (!searchInput && searchResultsCount == currentCardDeckSize) {
             return;
 
         } else if (namesPokedex[i].includes(searchInput)) {

@@ -57,9 +57,11 @@ function templatePokedexCard(i) {
     const name = pokemon.name;
     const imgUrl = returnImageUrl(pokemon);
     const basePokedexId = '#' + convertToTripleDigits(i + 1);
+    const method1 = 'classlist.remove';
+    const method2 = 'classlist.add';
 
     return /*html*/ `
-    <div onclick="showDetailView(${i})">
+    <div onclick="toggleDetailView(true, ${i})">
         <h2>
         ${capitalizeFirstCharacter(name)} <br>
         ${basePokedexId}</h2>
@@ -126,8 +128,7 @@ function returnImageUrl(pokemon) {
  */
 async function showMore() {
 
-    document.getElementById('button-show-more').classList.add('display-none');
-    document.getElementById('loading-animation').classList.remove('display-none');
+    toggleShowMoreButton()
 
     const first = currentCardDeckSize;
     const last = currentCardDeckSize + 20;
@@ -135,6 +136,12 @@ async function showMore() {
     await loadAndRenderPokemon(first, last);
     currentCardDeckSize = last;
 
-    document.getElementById('loading-animation').classList.add('display-none');
-    document.getElementById('button-show-more').classList.remove('display-none');
+    toggleShowMoreButton(true);
+}
+
+
+function toggleShowMoreButton(show) {
+
+    document.getElementById('button-show-more').classList.toggle('display-none', !show);
+    document.getElementById('loading-animation').classList.toggle('display-none', show);
 }

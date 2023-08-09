@@ -1,21 +1,16 @@
 /**
- * Called when the user clicks on a pokemon card. Shows the detail view and renders it for the inputted pokemon. Resizes the card deck by adding the detail-view-opened class to its classlist.
- * @param {*} i 
+ * Shows and renders or hides the detail view based on the inputted paramters.
+ * @param {boolean} show true, when the detail view should be shown
+ * @param {number} i index of the pokemon for which the detail view should be rendered
  */
-async function showDetailView(i) {
-    document.getElementById('detail-view').classList.remove('display-none');
-    document.getElementById('main').classList.add('detail-view-opened');
+async function toggleDetailView(show, i) {
+    
+    document.getElementById('detail-view').classList.toggle('display-none', !show);
+    document.getElementById('main').classList.toggle('detail-view-opened', show);
 
-    await renderDetailView(i);
-}
-
-
-/**
- * Hides the detail view and resizes the card deck to full window width by removing the detail-view-opened class from its classlist.
- */
-function hideDetailView() {
-    document.getElementById('detail-view').classList.add('display-none');
-    document.getElementById('main').classList.remove('detail-view-opened');
+    if (show) {
+        await renderDetailView(i);
+    }
 }
 
 

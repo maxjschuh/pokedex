@@ -24,13 +24,11 @@ let newSearchTriggered = false;
  */
 async function init() {
 
+    await fetchAllPokemonNames();
     await loadAndRenderPokemon(0, 20);
     currentCardDeckSize = 20;
 
-    await fetchAllPokemonNames();
-
-    document.getElementById('loading-animation').classList.add('display-none');
-    document.getElementById('button-show-more').classList.remove('display-none');
+    toggleShowMoreButton(true);
 }
 
 
