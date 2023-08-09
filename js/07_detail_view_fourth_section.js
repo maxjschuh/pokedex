@@ -65,13 +65,13 @@ async function generateEvolutionTree(basePokemonIndex) {
 
     for (let i = 0; i < firstStageEvolutions.length; i++) {
 
-        generateEvolutionTreeBranch(treeFirstBranch, firstStageEvolutions[i].species.name)
+        await generateEvolutionTreeBranch(treeFirstBranch, firstStageEvolutions[i].species.name)
 
         const secondStageEvolutions = firstStageEvolutions[i].evolves_to;
 
         for (let j = 0; j < secondStageEvolutions.length; j++) {
 
-            generateEvolutionTreeBranch(treeSecondBranch, secondStageEvolutions[j].species.name)
+            await generateEvolutionTreeBranch(treeSecondBranch, secondStageEvolutions[j].species.name)
         }
     }
 }
@@ -105,12 +105,14 @@ async function fetchSinglePokemonReturnIndex(name) {
         let response = await fetch(url);
         response = await response.json();
         basePokedex.splice(index, 1, response);
-
-        url = basePokedex[index].species.url;
-        response = await fetch(url);
-        response = await response.json();
-        speciesPokedex.splice(index, 1, response);
     }
+
+    if (!speciesPokedex[index]) {
+        
+        url = basePokedex[index].species.url;
+        await fetchData(index, url, speciesPokedex);        
+    }
+
     return index;
 }
 

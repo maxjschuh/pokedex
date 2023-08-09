@@ -179,6 +179,7 @@ detail view
     width: 20px;
     object-fit: contain;
     padding: 8px 8px 8px 0;
+    transform: rotate(180deg);
 }
 
 #detail-view-headline img:hover {
