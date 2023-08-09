@@ -1,88 +1,8 @@
-function renderAboutSection(i, pokemon) {
-
-    document.getElementById('section-about').innerHTML = /*html*/ `
-
-        <p id="flavor-text">${getEnglishFlavorText(i)}</p>
-
-        <div class="detail-view-table-row">
-
-            <div>
-                <p>Height&nbsp;</p>${pokemon.height}
-            </div>
-
-            <div id="detail-view-held-item">
-            </div>
-
-        </div>
-
-        <div class="detail-view-table-row">
-    
-            <div>
-                <p>Weight&nbsp;</p>${pokemon.weight}
-            </div>
-
-            <div id="detail-view-genders">
-            </div>
-
-        </div>
-
-        <div class="detail-view-separator"></div>
-
-        <div id="detail-view-types"></div>
-    `;
-}
-
-function templateBothGenders() {
-
-    return /*html*/ `
-        <p>Genders&nbsp;</p>
-        <img src="./img/male.svg" alt="icon male">
-        <img src="./img/female.svg" alt="icon female">
-    `;
-}
-
-function templateFemaleGender() {
-
-    return /*html*/ `
-        <p>Genders&nbsp;</p>
-        <img src="./img/female.svg" alt="icon female">
-    `;
-}
-
-function templateMaleGender() {
-
-    return /*html*/ `
-        <p>Genders&nbsp;</p>
-        <img src="./img/male.svg" alt="icon male">
-    `;
-}
-
-function templateGenderless() {
-
-    return /*html*/ `
-        <p>Genders&nbsp;</p>
-        <img src="./img/genderless.svg" alt="icon male">
-    `;
-}
-
-
-function templateAllTypes(i) {
-
-    let html = '';
-    const types = basePokedex[i].types;
-
-    for (let j = 0; j < types.length; j++) {
-
-        const type = types[j].type.name;
-
-        html += templateType(type);
-    }
-
-    return html;
-}
-
-
-function templateStats(i) {
+/**
+ * Renders the second section in the detail view (fight statistics) for the inputted pokemon.
+ * @param {number} i index of the pokemon whose statistics should be rendered
+ */
+function renderDetailViewSecondSection(i) {
 
     const type = basePokedex[i].types[0].type.name;
 
@@ -123,4 +43,17 @@ function templateStats(i) {
             <div class="stats-bar"></div>
             <div class="stats-bar background-type-${type}" style="width:calc(${calculateStatsBarWidth(i, 5, 200)}% - 56px)"></div>
         </div>`;
+}
+
+
+/**
+ * Calculates the width of the colored statistics bar for the inputted statistic and pokemon.
+ * @param {number} i index of the pokemon whose statistic should be used
+ * @param {string} statType category of the statistic like attack, defense, etc.
+ * @param {number} maxStat maximum statistic for the inputted category in the pokemon world
+ * @returns width of the colored statistics bar in percent of the maximum width
+ */
+function calculateStatsBarWidth(i, statType, maxStat) {
+
+    return basePokedex[i].stats[statType].base_stat / maxStat * 100;
 }
