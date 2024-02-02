@@ -55,7 +55,7 @@ async function renderFirst4Moves(i) {
  * Returns the HTML template for the inputted move including a type bubble
  * @param {string} moveName name of the move that should be rendered
  * @param {string} moveUrl API endpoint url of the move
- * @returns HTML template for the move including a type bubble
+ * @returns {string} HTML template for the move including a type bubble
  */
 async function templateMove(moveName, moveUrl) {
 

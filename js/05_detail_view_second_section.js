@@ -51,7 +51,7 @@ function renderDetailViewSecondSection(i) {
  * @param {number} i index of the pokemon whose statistic should be used
  * @param {string} statType category of the statistic like attack, defense, etc.
  * @param {number} maxStat maximum statistic for the inputted category in the pokemon world
- * @returns width of the colored statistics bar in percent of the maximum width
+ * @returns {number} width of the colored statistics bar in percent of the maximum width
  */
 function calculateStatsBarWidth(i, statType, maxStat) {
 

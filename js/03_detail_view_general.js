@@ -4,13 +4,12 @@
  * @param {number} i index of the pokemon for which the detail view should be rendered
  */
 async function toggleDetailView(show, i) {
-    
-    document.getElementById('detail-view').classList.toggle('display-none', !show);
+
+
+    document.getElementById('detail-view').classList.toggle('visible', show);
     document.getElementById('main').classList.toggle('detail-view-opened', show);
 
-    if (show) {
-        await renderDetailView(i);
-    }
+    if (show) await renderDetailView(i);
 }
 
 

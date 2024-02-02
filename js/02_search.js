@@ -18,7 +18,7 @@ async function startNewSearch() {
 
 /**
  * Validates the search input by trimming whitespace, converting it to lowercase and removing special characters.
- * @returns the validated search input
+ * @returns {string} the validated search input
  */
 function validateSearchInput() {
 
@@ -52,7 +52,7 @@ async function triggerSearch() {
 /**
  * Compares the search input with all pokemon names and for every hit calls the function addSinglePokemonToCardDeck. If the last search input is empty, it renders the first 20 pokemon.
  * @param {string} searchInput a search input by the user
- * @returns when a new search is triggered or when the search input is empty and the first 20 pokemon have been rendered.
+ * @returns {void} when a new search is triggered or when the search input is empty and the first 20 pokemon have been rendered.
  */
 async function search(searchInput) {
 

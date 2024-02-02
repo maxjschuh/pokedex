@@ -9,9 +9,7 @@ async function loadAndRenderPokemon(first, last) {
 
         let id = i + 1;
 
-        if (i >= 1010) {
-            id = '10' + `${id - 10}`.substring(1);
-        }
+        if (i >= 1010) id = '10' + `${id - 10}`.substring(1);
 
         if (!basePokedex[i]) {
             const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
@@ -28,7 +26,7 @@ async function loadAndRenderPokemon(first, last) {
  * @param {number} i index of the pokemon that should be fetched in the pokemonNames array
  * @param {string} url URL / endpoint of the API from where the data should be fetched
  * @param {Array} localArrayToPushTo local array to where the received data should be saved
- * @returns when an error occurs while communication with the API
+ * @returns {void} when an error occurs while communication with the API
  */
 async function fetchData(i, url, localArrayToPushTo) {
 
@@ -49,7 +47,7 @@ async function fetchData(i, url, localArrayToPushTo) {
 /**
  * Returns HTML Template for a pokemon card in the card deck.
  * @param {number} i index of the pokemon that should be rendered
- * @returns HTML Template for a pokemon card in the card deck.
+ * @returns {void} HTML Template for a pokemon card in the card deck.
  */
 function templatePokedexCard(i) {
 
@@ -57,8 +55,6 @@ function templatePokedexCard(i) {
     const name = pokemon.name;
     const imgUrl = returnImageUrl(pokemon);
     const basePokedexId = '#' + convertToTripleDigits(i + 1);
-    const method1 = 'classlist.remove';
-    const method2 = 'classlist.add';
 
     return /*html*/ `
     <div onclick="toggleDetailView(true, ${i})">
@@ -74,7 +70,7 @@ function templatePokedexCard(i) {
 /**
  * Changes the index to a three-digit number if it has less than three digits (by filling up the empty spaces with zeros).
  * @param {number} i index of the pokemon
- * @returns index as three-digit number
+ * @returns {number} index as three-digit number
  */
 function convertToTripleDigits(i) {
 
@@ -92,7 +88,7 @@ function convertToTripleDigits(i) {
 /**
  * Changes the first character of a input string to uppercase.
  * @param {string} inputString lowercase name of a pokemon
- * @returns name of a pokemon with uppercase first character
+ * @returns {string} name of a pokemon with uppercase first character
  */
 function capitalizeFirstCharacter(inputString) {
 
@@ -105,7 +101,7 @@ function capitalizeFirstCharacter(inputString) {
 /**
  * Returns the url for the picture of the pokemon in the card deck or detail view. Bypasses possible null values.
  * @param {object} pokemon entry in the database of the pokemon whose picture url should be returned
- * @returns image url for the inputted pokemon
+ * @returns {string} image url for the inputted pokemon
  */
 function returnImageUrl(pokemon) {
 

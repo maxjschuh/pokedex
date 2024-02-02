@@ -93,7 +93,7 @@ async function generateEvolutionTreeBranch(branchContainer, pokemonName) {
 /**
  * Fetches a single pokemons base and species data from the API and returns its database index.
  * @param {string} name name of the pokemon
- * @returns index of the pokemon
+ * @returns {number} index of the pokemon
  */
 async function fetchSinglePokemonReturnIndex(name) {
 
@@ -121,7 +121,7 @@ async function fetchSinglePokemonReturnIndex(name) {
 /**
  * Returns HTML template of the evolution tree card for the inputted pokemon
  * @param {number} i index of the pokemon which should be rendered in the tree card
- * @returns HTML template of the evolution tree card for the inputted pokemon
+ * @returns {string} HTML template of the evolution tree card for the inputted pokemon
  */
 function templateEvolutionTreeCard(i) {
 
@@ -142,7 +142,7 @@ function templateEvolutionTreeCard(i) {
 /**
  * Sets the border of the evolution tree card of the pokemon which is currently shown in the detail view to the type color.
  * @param {number} i index of the pokemon whose evolution tree card should be set as active
- * @returns when the evolution tree card no longer exists, e.g. when the user switched to a different pokemon in the mean time
+ * @returns {void} when the evolution tree card no longer exists, e.g. when the user switched to a different pokemon in the mean time
  */
 function setBorderOfActiveTreeCard(i) {
 

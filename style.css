@@ -104,8 +104,6 @@ main {
 
 #card-deck div:active {
     background-color: #3CA1CC;
-
-    /* filter: brightness(50%); */
 }
 
 #card-deck img {
@@ -122,6 +120,7 @@ h2 {
     left: 8px;
     font-size: 24px;
     margin: 0;
+    z-index: 1;
 }
 
 #card-deck div:hover {
@@ -155,18 +154,13 @@ detail view
     top: 158px;
     right: 0;
     height: 100%;
-
-    animation: slideInFromRight 250ms ease forwards;
+    transform: translateX(500px);
+    transition: all 250ms ease-out;
 }
 
-@keyframes slideInFromRight {
-    0% {
-        right: -220px;
-    }
-
-    100% {
-        right: 0;
-    }
+.visible {
+    transform: translateX(0) !important;
+    transition: all 250ms ease-out;
 }
 
 #detail-view-headline {

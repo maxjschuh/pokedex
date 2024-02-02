@@ -34,7 +34,7 @@ async function init() {
 
 /**
  * Fetches the names of all existing pokemon from the API and saves them to the namesPokedex array.
- * @returns when an error occurs while communication with the API
+ * @returns {void} when an error occurs while communication with the API
  */
 async function fetchAllPokemonNames() {
 

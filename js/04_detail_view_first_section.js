@@ -59,7 +59,7 @@ function renderAboutSection(i, pokemon) {
 /**
  * Searches the english flavor text for the inputted pokemon in the database and returns it.
  * @param {number} i index of the pokemon whose flavor text should be returned
- * @returns english flavor text
+ * @returns {string} english flavor text
  */
 function getEnglishFlavorText(i) {
 
@@ -114,7 +114,7 @@ function renderGenders(i) {
 /**
  * Returns the correct icon template for the gender rate of the inputted pokemon (0 == only males, 8 == only females, number between 0 and 8 == females and males, -1 == genderless )
  * @param {number} i index of the pokemon whose genders should be rendered
- * @returns gender icon template for the inputted pokemon
+ * @returns {string} gender icon template for the inputted pokemon
  */
 function returnGendersTemplate(i) {
 
@@ -141,7 +141,7 @@ function returnGendersTemplate(i) {
 
 /**
  * HTML Template for the female and male gender icons.
- * @returns HTML Template for the female and male gender icons.
+ * @returns {string} HTML Template for the female and male gender icons.
  */
 function templateBothGenders() {
 
@@ -155,7 +155,7 @@ function templateBothGenders() {
 
 /**
  * HTML Template for only the female gender icon.
- * @returns HTML Template for only the female gender icon
+ * @returns {string} HTML Template for only the female gender icon
  */
 function templateFemaleGender() {
 
@@ -168,7 +168,7 @@ function templateFemaleGender() {
 
 /**
  * HTML Template for only the male gender icon.
- * @returns HTML Template for only the male gender icon
+ * @returns {string} HTML Template for only the male gender icon
  */
 function templateMaleGender() {
 
@@ -181,7 +181,7 @@ function templateMaleGender() {
 
 /**
  * HTML Template for the genderless icon.
- * @returns HTML Template for the genderless icon
+ * @returns {string} HTML Template for the genderless icon
  */
 function templateGenderless() {
 
@@ -195,7 +195,7 @@ function templateGenderless() {
 /**
  * Puts the template for all types of the pokemon together and returns it.
  * @param {number} i index of the pokemon whose types should be rendered
- * @returns HTML template for all types of the pokemon
+ * @returns {string} HTML template for all types of the pokemon
  */
 function templateAllTypes(i) {
 
@@ -216,7 +216,7 @@ function templateAllTypes(i) {
 /**
  * Returns HTML Template for a type bubble for the inputted type.
  * @param {string} type type name
- * @returns HTML Template for a type bubble for the inputted type
+ * @returns {string} HTML Template for a type bubble for the inputted type
  */
 function templateType(type) {
 
