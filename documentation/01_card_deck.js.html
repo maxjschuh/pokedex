@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: 01_card_deck.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: 01_card_deck.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Fetches the base data for a range of pokemon and renders them in the card deck.
+ * @param {number} first first pokemon in the range that should be fetched and rendered
+ * @param {number} last last pokemon in the range that should be fetched and rendered
+ */
+async function loadAndRenderPokemon(first, last) {
+
+    for (let i = first; i &lt; last; i++) {
+
+        let id = i + 1;
+
+        if (i >= 1010) id = '10' + `${id - 10}`.substring(1);
+
+        if (!basePokedex[i]) {
+            const url = `https://pokeapi.co/api/v2/pokemon/${id}`;
+            await fetchData(i, url, basePokedex);
+        }
+
+        document.getElementById('card-deck').innerHTML += templatePokedexCard(i);
+    }
+}
+
+
+/**
+ * Fetches data from the API from an inputted endpoint and saves the this data to an inputted array.
+ * @param {number} i index of the pokemon that should be fetched in the pokemonNames array
+ * @param {string} url URL / endpoint of the API from where the data should be fetched
+ * @param {Array} localArrayToPushTo local array to where the received data should be saved
+ * @returns {void} when an error occurs while communication with the API
+ */
+async function fetchData(i, url, localArrayToPushTo) {
+
+    let response;
+    try {
+        response = await fetch(url);
+
+    } catch (error) {
+        document.getElementById('api-warning').classList.remove('display-none');
+        return;
+    }
+
+    let responseJson = await response.json();
+    localArrayToPushTo.splice(i, 1, responseJson);
+}
+
+
+/**
+ * Returns HTML Template for a pokemon card in the card deck.
+ * @param {number} i index of the pokemon that should be rendered
+ * @returns {void} HTML Template for a pokemon card in the card deck.
+ */
+function templatePokedexCard(i) {
+
+    const pokemon = basePokedex[i];
+    const name = pokemon.name;
+    const imgUrl = returnImageUrl(pokemon);
+    const basePokedexId = '#' + convertToTripleDigits(i + 1);
+
+    return /*html*/ `
+    &lt;div onclick="toggleDetailView(true, ${i})">
+        &lt;h2>
+        ${capitalizeFirstCharacter(name)} &lt;br>
+        ${basePokedexId}&lt;/h2>
+        &lt;img src="${imgUrl}" alt="${name}">        
+    &lt;/div>
+    `;
+}
+
+
+/**
+ * Changes the index to a three-digit number if it has less than three digits (by filling up the empty spaces with zeros).
+ * @param {number} i index of the pokemon
+ * @returns {number} index as three-digit number
+ */
+function convertToTripleDigits(i) {
+
+    const idAsString = `${i}`;
+
+    if (idAsString.length > 3) {
+        return idAsString;
+    }
+
+    const zeros = '0'.repeat(3 - idAsString.length);
+    return zeros + idAsString;
+}
+
+
+/**
+ * Changes the first character of a input string to uppercase.
+ * @param {string} inputString lowercase name of a pokemon
+ * @returns {string} name of a pokemon with uppercase first character
+ */
+function capitalizeFirstCharacter(inputString) {
+
+    let firstCharacter = inputString.charAt(0).toUpperCase();
+    let newString = firstCharacter + inputString.substring(1);
+    return newString;
+}
+
+
+/**
+ * Returns the url for the picture of the pokemon in the card deck or detail view. Bypasses possible null values.
+ * @param {object} pokemon entry in the database of the pokemon whose picture url should be returned
+ * @returns {string} image url for the inputted pokemon
+ */
+function returnImageUrl(pokemon) {
+
+    let imgUrl = pokemon.sprites.other.home.front_default;
+
+    if (!imgUrl) {
+        imgUrl = pokemon.sprites.other['official-artwork'].front_default;
+    }
+
+    if (!imgUrl) {
+        imgUrl = './img/no_image.png';
+    }
+
+    return imgUrl;
+}
+
+
+/**
+ * Called by user click on "Show more"-button. Loads the next 20 pokemon depending on the already ready ones.
+ */
+async function showMore() {
+
+    toggleShowMoreButton()
+
+    const first = currentCardDeckSize;
+    const last = currentCardDeckSize + 20;
+
+    await loadAndRenderPokemon(first, last);
+    currentCardDeckSize = last;
+
+    toggleShowMoreButton(true);
+}
+
+
+function toggleShowMoreButton(show) {
+
+    document.getElementById('button-show-more').classList.toggle('display-none', !show);
+    document.getElementById('loading-animation').classList.toggle('display-none', show);
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addSinglePokemonToCardDeck">addSinglePokemonToCardDeck</a></li><li><a href="global.html#basePokedex">basePokedex</a></li><li><a href="global.html#calculateStatsBarWidth">calculateStatsBarWidth</a></li><li><a href="global.html#capitalizeFirstCharacter">capitalizeFirstCharacter</a></li><li><a href="global.html#convertToTripleDigits">convertToTripleDigits</a></li><li><a href="global.html#createMovesArrays">createMovesArrays</a></li><li><a href="global.html#evolutionTree">evolutionTree</a></li><li><a href="global.html#fetchAllPokemonNames">fetchAllPokemonNames</a></li><li><a href="global.html#fetchData">fetchData</a></li><li><a href="global.html#fetchMoveType">fetchMoveType</a></li><li><a href="global.html#fetchSinglePokemonReturnIndex">fetchSinglePokemonReturnIndex</a></li><li><a href="global.html#generateEvolutionTree">generateEvolutionTree</a></li><li><a href="global.html#generateEvolutionTreeBranch">generateEvolutionTreeBranch</a></li><li><a href="global.html#getEnglishFlavorText">getEnglishFlavorText</a></li><li><a href="global.html#getEvolutionChainData">getEvolutionChainData</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#loadAndRenderPokemon">loadAndRenderPokemon</a></li><li><a href="global.html#renderAboutSection">renderAboutSection</a></li><li><a href="global.html#renderDetailView">renderDetailView</a></li><li><a href="global.html#renderDetailViewFirstSection">renderDetailViewFirstSection</a></li><li><a href="global.html#renderDetailViewFourthSection">renderDetailViewFourthSection</a></li><li><a href="global.html#renderDetailViewSecondSection">renderDetailViewSecondSection</a></li><li><a href="global.html#renderDetailViewThirdSection">renderDetailViewThirdSection</a></li><li><a href="global.html#renderFirst4Moves">renderFirst4Moves</a></li><li><a href="global.html#renderGenders">renderGenders</a></li><li><a href="global.html#renderHeldItem">renderHeldItem</a></li><li><a href="global.html#renderPokemonName">renderPokemonName</a></li><li><a href="global.html#renderTopImage">renderTopImage</a></li><li><a href="global.html#returnGendersTemplate">returnGendersTemplate</a></li><li><a href="global.html#returnImageUrl">returnImageUrl</a></li><li><a href="global.html#search">search</a></li><li><a href="global.html#searchResultsCount">searchResultsCount</a></li><li><a href="global.html#setBorderOfActiveTreeCard">setBorderOfActiveTreeCard</a></li><li><a href="global.html#showMore">showMore</a></li><li><a href="global.html#startNewSearch">startNewSearch</a></li><li><a href="global.html#templateAllTypes">templateAllTypes</a></li><li><a href="global.html#templateBothGenders">templateBothGenders</a></li><li><a href="global.html#templateEvolutionTreeCard">templateEvolutionTreeCard</a></li><li><a href="global.html#templateFemaleGender">templateFemaleGender</a></li><li><a href="global.html#templateGenderless">templateGenderless</a></li><li><a href="global.html#templateMaleGender">templateMaleGender</a></li><li><a href="global.html#templateMove">templateMove</a></li><li><a href="global.html#templatePokedexCard">templatePokedexCard</a></li><li><a href="global.html#templateType">templateType</a></li><li><a href="global.html#toggleDetailView">toggleDetailView</a></li><li><a href="global.html#triggerSearch">triggerSearch</a></li><li><a href="global.html#unlockSection">unlockSection</a></li><li><a href="global.html#validateSearchInput">validateSearchInput</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Wed Jul 10 2024 09:58:01 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

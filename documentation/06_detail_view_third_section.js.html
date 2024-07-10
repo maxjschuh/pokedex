@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: 06_detail_view_third_section.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: 06_detail_view_third_section.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Renders the third section in the detail view for the inputted pokemon.
+ * @param {number} i index of the pokemon for which the detail view should be rendered
+ */
+async function renderDetailViewThirdSection(i) {
+
+    await createMovesArrays();
+    await renderFirst4Moves(i);
+    unlockSection('section-moves', 'loading-animation-2');
+}
+
+
+/**
+ * Fetches all move names from the API and saves them to the moveNames array.
+ */
+async function createMovesArrays() {
+
+    let response = await fetch('https://pokeapi.co/api/v2/move?limit=10000');
+    response = await response.json();
+
+    for (let i = 0; i &lt; response.results.length; i++) {
+        const moveName = response.results[i].name;
+
+        moveNames.push(moveName);
+    }
+
+    moveTypes = Array(moveNames.length).fill(null);
+}
+
+
+/**
+ * Renders the first four moves in the database for the inputted pokemon.
+ * @param {number} i index of the pokemon whose moves should be rendered
+ */
+async function renderFirst4Moves(i) {
+    const pokemon = basePokedex[i];
+
+    for (let j = 0; j &lt; 4; j++) {
+
+        const id = `detail-view-move-${j}`;
+        let container = document.getElementById(id);
+
+        if (pokemon.moves[j]) {
+            const move = pokemon.moves[j].move;
+            container.innerHTML = await templateMove(move.name, move.url);
+
+        } else {
+            container.innerHTML = 'No data';
+        }
+    }
+}
+
+
+/**
+ * Returns the HTML template for the inputted move including a type bubble
+ * @param {string} moveName name of the move that should be rendered
+ * @param {string} moveUrl API endpoint url of the move
+ * @returns {string} HTML template for the move including a type bubble
+ */
+async function templateMove(moveName, moveUrl) {
+
+    let index = moveNames.indexOf(moveName);
+
+    if (moveTypes[index] == null) {
+
+        await fetchMoveType(index, moveUrl);
+    }
+    const moveType = moveTypes[index];
+
+    let html = /*html*/ `
+    ${capitalizeFirstCharacter(moveName)}
+    ${templateType(moveType)}
+    `;
+    return html;
+}
+
+
+/**
+ * Fetches the type of a inputted move from the API and saves it in the moveTypes array.
+ * @param {number} index index of the move whose type should be fetched
+ * @param {string} url api endpoint url to fetch the move type from
+ */
+async function fetchMoveType(index, url) {
+
+    let moveData = await fetch(url);
+    moveData = await moveData.json();
+
+    moveTypes.splice(index, 1, moveData.type.name);
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addSinglePokemonToCardDeck">addSinglePokemonToCardDeck</a></li><li><a href="global.html#basePokedex">basePokedex</a></li><li><a href="global.html#calculateStatsBarWidth">calculateStatsBarWidth</a></li><li><a href="global.html#capitalizeFirstCharacter">capitalizeFirstCharacter</a></li><li><a href="global.html#convertToTripleDigits">convertToTripleDigits</a></li><li><a href="global.html#createMovesArrays">createMovesArrays</a></li><li><a href="global.html#evolutionTree">evolutionTree</a></li><li><a href="global.html#fetchAllPokemonNames">fetchAllPokemonNames</a></li><li><a href="global.html#fetchData">fetchData</a></li><li><a href="global.html#fetchMoveType">fetchMoveType</a></li><li><a href="global.html#fetchSinglePokemonReturnIndex">fetchSinglePokemonReturnIndex</a></li><li><a href="global.html#generateEvolutionTree">generateEvolutionTree</a></li><li><a href="global.html#generateEvolutionTreeBranch">generateEvolutionTreeBranch</a></li><li><a href="global.html#getEnglishFlavorText">getEnglishFlavorText</a></li><li><a href="global.html#getEvolutionChainData">getEvolutionChainData</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#loadAndRenderPokemon">loadAndRenderPokemon</a></li><li><a href="global.html#renderAboutSection">renderAboutSection</a></li><li><a href="global.html#renderDetailView">renderDetailView</a></li><li><a href="global.html#renderDetailViewFirstSection">renderDetailViewFirstSection</a></li><li><a href="global.html#renderDetailViewFourthSection">renderDetailViewFourthSection</a></li><li><a href="global.html#renderDetailViewSecondSection">renderDetailViewSecondSection</a></li><li><a href="global.html#renderDetailViewThirdSection">renderDetailViewThirdSection</a></li><li><a href="global.html#renderFirst4Moves">renderFirst4Moves</a></li><li><a href="global.html#renderGenders">renderGenders</a></li><li><a href="global.html#renderHeldItem">renderHeldItem</a></li><li><a href="global.html#renderPokemonName">renderPokemonName</a></li><li><a href="global.html#renderTopImage">renderTopImage</a></li><li><a href="global.html#returnGendersTemplate">returnGendersTemplate</a></li><li><a href="global.html#returnImageUrl">returnImageUrl</a></li><li><a href="global.html#search">search</a></li><li><a href="global.html#searchResultsCount">searchResultsCount</a></li><li><a href="global.html#setBorderOfActiveTreeCard">setBorderOfActiveTreeCard</a></li><li><a href="global.html#showMore">showMore</a></li><li><a href="global.html#startNewSearch">startNewSearch</a></li><li><a href="global.html#templateAllTypes">templateAllTypes</a></li><li><a href="global.html#templateBothGenders">templateBothGenders</a></li><li><a href="global.html#templateEvolutionTreeCard">templateEvolutionTreeCard</a></li><li><a href="global.html#templateFemaleGender">templateFemaleGender</a></li><li><a href="global.html#templateGenderless">templateGenderless</a></li><li><a href="global.html#templateMaleGender">templateMaleGender</a></li><li><a href="global.html#templateMove">templateMove</a></li><li><a href="global.html#templatePokedexCard">templatePokedexCard</a></li><li><a href="global.html#templateType">templateType</a></li><li><a href="global.html#toggleDetailView">toggleDetailView</a></li><li><a href="global.html#triggerSearch">triggerSearch</a></li><li><a href="global.html#unlockSection">unlockSection</a></li><li><a href="global.html#validateSearchInput">validateSearchInput</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Wed Jul 10 2024 09:58:01 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: 04_detail_view_first_section.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: 04_detail_view_first_section.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Renders the first section in the detail view for the inputted pokemon.
+ * @param {number} i index of the pokemon for which the detail view should be rendered
+ * @param {object} pokemon entry in the database of the pokemon for which the detail view should be rendered
+ */
+async function renderDetailViewFirstSection(i, pokemon) {
+
+    const url = basePokedex[i].species.url;
+    await fetchData(i, url, speciesPokedex);
+
+    renderAboutSection(i, pokemon);
+    renderGenders(i);
+    renderHeldItem(i);
+    document.getElementById('detail-view-types').innerHTML = templateAllTypes(i);
+    unlockSection('section-about', 'loading-animation-1');
+}
+
+
+/**
+ * Renders the about section in the detail view for an inputted pokemon.
+ * @param {number} i index of the pokemon whose data should be rendered
+ * @param {object} pokemon entry in the database of the pokemon which should be rendered
+ */
+function renderAboutSection(i, pokemon) {
+
+    document.getElementById('section-about').innerHTML = /*html*/ `
+
+        &lt;p id="flavor-text">${getEnglishFlavorText(i)}&lt;/p>
+
+        &lt;div class="detail-view-table-row">
+
+            &lt;div>
+                &lt;p>Height&amp;nbsp;&lt;/p>${pokemon.height}
+            &lt;/div>
+
+            &lt;div id="detail-view-held-item">
+            &lt;/div>
+
+        &lt;/div>
+
+        &lt;div class="detail-view-table-row">
+    
+            &lt;div>
+                &lt;p>Weight&amp;nbsp;&lt;/p>${pokemon.weight}
+            &lt;/div>
+
+            &lt;div id="detail-view-genders">
+            &lt;/div>
+
+        &lt;/div>
+
+        &lt;div class="detail-view-separator">&lt;/div>
+
+        &lt;div id="detail-view-types">&lt;/div>
+    `;
+}
+
+
+/**
+ * Searches the english flavor text for the inputted pokemon in the database and returns it.
+ * @param {number} i index of the pokemon whose flavor text should be returned
+ * @returns {string} english flavor text
+ */
+function getEnglishFlavorText(i) {
+
+    const pokemon = speciesPokedex[i];
+
+    for (let i = 0; i &lt; pokemon.flavor_text_entries.length; i++) {
+        const entry = pokemon.flavor_text_entries[i];
+
+        if (entry.language.name == 'en') {
+
+            return entry.flavor_text;
+        }
+    }
+}
+
+
+/**
+ * Renders the held item for the inputted pokemon
+ * @param {number} i index of the pokemon whose held item should be rendered
+ */
+function renderHeldItem(i) {
+
+    let container = document.getElementById('detail-view-held-item');
+
+    let item = '';
+
+    try {
+        item = basePokedex[i].held_items[0].item.name;
+    }
+
+    catch (error) {
+        item = 'none';
+    }
+
+    container.innerHTML = /*html*/ `
+    &lt;p>Held item&amp;nbsp;&lt;/p>
+    ${item} `;
+}
+
+
+/**
+ * Renders the possible genders in the detail view.
+ * @param {number} i index of the pokemon whose genders should be rendered
+ */
+function renderGenders(i) {
+
+    let container = document.getElementById('detail-view-genders');
+    container.innerHTML = returnGendersTemplate(i);
+}
+
+
+/**
+ * Returns the correct icon template for the gender rate of the inputted pokemon (0 == only males, 8 == only females, number between 0 and 8 == females and males, -1 == genderless )
+ * @param {number} i index of the pokemon whose genders should be rendered
+ * @returns {string} gender icon template for the inputted pokemon
+ */
+function returnGendersTemplate(i) {
+
+    const genderRate = speciesPokedex[i]['gender_rate'];
+
+    if (genderRate > 0 &amp;&amp; genderRate &lt; 8) {
+
+        return templateBothGenders();
+
+    } else if (genderRate == 8) {
+
+        return templateFemaleGender();
+
+    } else if (genderRate == 0) {
+
+        return templateMaleGender();
+
+    } else {
+
+        return templateGenderless();
+    }
+}
+
+
+/**
+ * HTML Template for the female and male gender icons.
+ * @returns {string} HTML Template for the female and male gender icons.
+ */
+function templateBothGenders() {
+
+    return /*html*/ `
+        &lt;p>Genders&amp;nbsp;&lt;/p>
+        &lt;img src="./img/male.svg" alt="icon male">
+        &lt;img src="./img/female.svg" alt="icon female">
+    `;
+}
+
+
+/**
+ * HTML Template for only the female gender icon.
+ * @returns {string} HTML Template for only the female gender icon
+ */
+function templateFemaleGender() {
+
+    return /*html*/ `
+        &lt;p>Genders&amp;nbsp;&lt;/p>
+        &lt;img src="./img/female.svg" alt="icon female">
+    `;
+}
+
+
+/**
+ * HTML Template for only the male gender icon.
+ * @returns {string} HTML Template for only the male gender icon
+ */
+function templateMaleGender() {
+
+    return /*html*/ `
+        &lt;p>Genders&amp;nbsp;&lt;/p>
+        &lt;img src="./img/male.svg" alt="icon male">
+    `;
+}
+
+
+/**
+ * HTML Template for the genderless icon.
+ * @returns {string} HTML Template for the genderless icon
+ */
+function templateGenderless() {
+
+    return /*html*/ `
+        &lt;p>Genders&amp;nbsp;&lt;/p>
+        &lt;img src="./img/genderless.svg" alt="icon male">
+    `;
+}
+
+
+/**
+ * Puts the template for all types of the pokemon together and returns it.
+ * @param {number} i index of the pokemon whose types should be rendered
+ * @returns {string} HTML template for all types of the pokemon
+ */
+function templateAllTypes(i) {
+
+    let html = '';
+    const types = basePokedex[i].types;
+
+    for (let j = 0; j &lt; types.length; j++) {
+
+        const type = types[j].type.name;
+
+        html += templateType(type);
+    }
+
+    return html;
+}
+
+
+/**
+ * Returns HTML Template for a type bubble for the inputted type.
+ * @param {string} type type name
+ * @returns {string} HTML Template for a type bubble for the inputted type
+ */
+function templateType(type) {
+
+    let html = /*html*/ `
+    &lt;div class="detail-view-type-icon background-type-${type}">
+        &lt;img src="./img/types/type_${type}.svg" alt="icon type ${type}">
+        ${capitalizeFirstCharacter(type)}
+    &lt;/div> `;
+
+    return html;
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addSinglePokemonToCardDeck">addSinglePokemonToCardDeck</a></li><li><a href="global.html#basePokedex">basePokedex</a></li><li><a href="global.html#calculateStatsBarWidth">calculateStatsBarWidth</a></li><li><a href="global.html#capitalizeFirstCharacter">capitalizeFirstCharacter</a></li><li><a href="global.html#convertToTripleDigits">convertToTripleDigits</a></li><li><a href="global.html#createMovesArrays">createMovesArrays</a></li><li><a href="global.html#evolutionTree">evolutionTree</a></li><li><a href="global.html#fetchAllPokemonNames">fetchAllPokemonNames</a></li><li><a href="global.html#fetchData">fetchData</a></li><li><a href="global.html#fetchMoveType">fetchMoveType</a></li><li><a href="global.html#fetchSinglePokemonReturnIndex">fetchSinglePokemonReturnIndex</a></li><li><a href="global.html#generateEvolutionTree">generateEvolutionTree</a></li><li><a href="global.html#generateEvolutionTreeBranch">generateEvolutionTreeBranch</a></li><li><a href="global.html#getEnglishFlavorText">getEnglishFlavorText</a></li><li><a href="global.html#getEvolutionChainData">getEvolutionChainData</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#loadAndRenderPokemon">loadAndRenderPokemon</a></li><li><a href="global.html#renderAboutSection">renderAboutSection</a></li><li><a href="global.html#renderDetailView">renderDetailView</a></li><li><a href="global.html#renderDetailViewFirstSection">renderDetailViewFirstSection</a></li><li><a href="global.html#renderDetailViewFourthSection">renderDetailViewFourthSection</a></li><li><a href="global.html#renderDetailViewSecondSection">renderDetailViewSecondSection</a></li><li><a href="global.html#renderDetailViewThirdSection">renderDetailViewThirdSection</a></li><li><a href="global.html#renderFirst4Moves">renderFirst4Moves</a></li><li><a href="global.html#renderGenders">renderGenders</a></li><li><a href="global.html#renderHeldItem">renderHeldItem</a></li><li><a href="global.html#renderPokemonName">renderPokemonName</a></li><li><a href="global.html#renderTopImage">renderTopImage</a></li><li><a href="global.html#returnGendersTemplate">returnGendersTemplate</a></li><li><a href="global.html#returnImageUrl">returnImageUrl</a></li><li><a href="global.html#search">search</a></li><li><a href="global.html#searchResultsCount">searchResultsCount</a></li><li><a href="global.html#setBorderOfActiveTreeCard">setBorderOfActiveTreeCard</a></li><li><a href="global.html#showMore">showMore</a></li><li><a href="global.html#startNewSearch">startNewSearch</a></li><li><a href="global.html#templateAllTypes">templateAllTypes</a></li><li><a href="global.html#templateBothGenders">templateBothGenders</a></li><li><a href="global.html#templateEvolutionTreeCard">templateEvolutionTreeCard</a></li><li><a href="global.html#templateFemaleGender">templateFemaleGender</a></li><li><a href="global.html#templateGenderless">templateGenderless</a></li><li><a href="global.html#templateMaleGender">templateMaleGender</a></li><li><a href="global.html#templateMove">templateMove</a></li><li><a href="global.html#templatePokedexCard">templatePokedexCard</a></li><li><a href="global.html#templateType">templateType</a></li><li><a href="global.html#toggleDetailView">toggleDetailView</a></li><li><a href="global.html#triggerSearch">triggerSearch</a></li><li><a href="global.html#unlockSection">unlockSection</a></li><li><a href="global.html#validateSearchInput">validateSearchInput</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Wed Jul 10 2024 09:58:01 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

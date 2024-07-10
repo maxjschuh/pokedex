@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: 00_initialize.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: 00_initialize.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Arrays for storing data from the API.
+ */
+let basePokedex = Array(1281).fill(null);
+let speciesPokedex = Array(1281).fill(null);
+let namesPokedex = Array(1281).fill(null);
+let evolutionChains = Array(1281).fill(null);
+let moveNames = [];
+let moveTypes = [];
+
+
+/**
+ * Utility variables for functions.
+ */
+let searchResultsCount;
+let currentCardDeckSize;
+let searchInputs = [];
+let ongoingSearch = false;
+let newSearchTriggered = false;
+
+
+/**
+ * Initializes the page by loading the first 20 pokemon into the card deck.
+ */
+async function init() {
+
+    await fetchAllPokemonNames();
+    await loadAndRenderPokemon(0, 20);
+    currentCardDeckSize = 20;
+
+    toggleShowMoreButton(true);
+}
+
+
+/**
+ * Fetches the names of all existing pokemon from the API and saves them to the namesPokedex array.
+ * @returns {void} when an error occurs while communication with the API
+ */
+async function fetchAllPokemonNames() {
+
+    let response;
+    try {
+        response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=100000&amp;offset=0');
+
+    } catch (error) {
+        document.getElementById('api-warning').classList.remove('display-none');
+        return;
+    }
+    let responseJson = await response.json();
+
+    for (let i = 0; i &lt; responseJson.results.length; i++) {
+        const pokemon = responseJson.results[i];
+
+        namesPokedex.splice(i, 1, pokemon.name);
+    }
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#addSinglePokemonToCardDeck">addSinglePokemonToCardDeck</a></li><li><a href="global.html#basePokedex">basePokedex</a></li><li><a href="global.html#calculateStatsBarWidth">calculateStatsBarWidth</a></li><li><a href="global.html#capitalizeFirstCharacter">capitalizeFirstCharacter</a></li><li><a href="global.html#convertToTripleDigits">convertToTripleDigits</a></li><li><a href="global.html#createMovesArrays">createMovesArrays</a></li><li><a href="global.html#evolutionTree">evolutionTree</a></li><li><a href="global.html#fetchAllPokemonNames">fetchAllPokemonNames</a></li><li><a href="global.html#fetchData">fetchData</a></li><li><a href="global.html#fetchMoveType">fetchMoveType</a></li><li><a href="global.html#fetchSinglePokemonReturnIndex">fetchSinglePokemonReturnIndex</a></li><li><a href="global.html#generateEvolutionTree">generateEvolutionTree</a></li><li><a href="global.html#generateEvolutionTreeBranch">generateEvolutionTreeBranch</a></li><li><a href="global.html#getEnglishFlavorText">getEnglishFlavorText</a></li><li><a href="global.html#getEvolutionChainData">getEvolutionChainData</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#loadAndRenderPokemon">loadAndRenderPokemon</a></li><li><a href="global.html#renderAboutSection">renderAboutSection</a></li><li><a href="global.html#renderDetailView">renderDetailView</a></li><li><a href="global.html#renderDetailViewFirstSection">renderDetailViewFirstSection</a></li><li><a href="global.html#renderDetailViewFourthSection">renderDetailViewFourthSection</a></li><li><a href="global.html#renderDetailViewSecondSection">renderDetailViewSecondSection</a></li><li><a href="global.html#renderDetailViewThirdSection">renderDetailViewThirdSection</a></li><li><a href="global.html#renderFirst4Moves">renderFirst4Moves</a></li><li><a href="global.html#renderGenders">renderGenders</a></li><li><a href="global.html#renderHeldItem">renderHeldItem</a></li><li><a href="global.html#renderPokemonName">renderPokemonName</a></li><li><a href="global.html#renderTopImage">renderTopImage</a></li><li><a href="global.html#returnGendersTemplate">returnGendersTemplate</a></li><li><a href="global.html#returnImageUrl">returnImageUrl</a></li><li><a href="global.html#search">search</a></li><li><a href="global.html#searchResultsCount">searchResultsCount</a></li><li><a href="global.html#setBorderOfActiveTreeCard">setBorderOfActiveTreeCard</a></li><li><a href="global.html#showMore">showMore</a></li><li><a href="global.html#startNewSearch">startNewSearch</a></li><li><a href="global.html#templateAllTypes">templateAllTypes</a></li><li><a href="global.html#templateBothGenders">templateBothGenders</a></li><li><a href="global.html#templateEvolutionTreeCard">templateEvolutionTreeCard</a></li><li><a href="global.html#templateFemaleGender">templateFemaleGender</a></li><li><a href="global.html#templateGenderless">templateGenderless</a></li><li><a href="global.html#templateMaleGender">templateMaleGender</a></li><li><a href="global.html#templateMove">templateMove</a></li><li><a href="global.html#templatePokedexCard">templatePokedexCard</a></li><li><a href="global.html#templateType">templateType</a></li><li><a href="global.html#toggleDetailView">toggleDetailView</a></li><li><a href="global.html#triggerSearch">triggerSearch</a></li><li><a href="global.html#unlockSection">unlockSection</a></li><li><a href="global.html#validateSearchInput">validateSearchInput</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Wed Jul 10 2024 09:58:01 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
