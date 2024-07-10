@@ -64,7 +64,6 @@ nav a:active {
     gap: 24px;
 }
 
-
 main {
     position: fixed;
     top: 0;
@@ -127,8 +126,6 @@ h2 {
     transform: scale(105%);
 }
 
-
-
 .display-none {
     display: none !important;
 }
@@ -183,7 +180,6 @@ detail view
 
 #detail-view-headline img:active {
     filter: invert(60%) sepia(45%) saturate(710%) hue-rotate(155deg) brightness(87%) contrast(81%);
-    /* filter: brightness(80%); */
 }
 
 #detail-view-pokemon-name {
@@ -488,8 +484,6 @@ custom scrollbar
     background: #f5f5f5;
 }
 
-
-
 /*----------------------------------
 loading animation
 ----------------------------------*/
@@ -550,8 +544,6 @@ imprint / data protection
 #imprint-main a:active {
     color: #3CA1CC;
 }
-
-
 
 /*----------------------------------
 type colors - backgrounds
@@ -732,6 +724,13 @@ responsive design
 
     form input {
         width: 180px;
+    }
+}
+
+@media (max-width: 800px) {
+
+    .burger-menu {
+        display: flex;
     }
 }
 
